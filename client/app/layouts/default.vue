@@ -11,23 +11,18 @@
       <v-toolbar-title style="color: #D0DA52">EXKASAN</v-toolbar-title>
       <v-spacer></v-spacer>
 
-      <div>หน้าหลัก</div>/&nbsp;
-      <div>การให้บริการ</div>/&nbsp;
-      <div>ระบบตรวจสอบ</div>
+      <v-btn text>หน้าหลัก</v-btn>&nbsp;
+      <v-btn text>การให้บริการ</v-btn>&nbsp;
+      <v-btn text>ระบบตรวจสอบ</v-btn>
 
     </v-app-bar>
 
-    <div
-        :style="`margin-top: 60px`"
-    >
+    <div :style="`margin-top: 60px`">
 
       <Nuxt/>
+
     </div>
 
 
   </v-app>
 </template>
-
-<script>
-
-</script>

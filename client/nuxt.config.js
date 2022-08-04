@@ -18,6 +18,7 @@ module.exports = {
             {name: 'viewport', content: 'width=device-width, initial-scale=1'},
             {hid: 'description', name: 'description', content: 'Meta description'}
         ],
+
         script: [
             {
                 src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'
@@ -31,6 +32,10 @@ module.exports = {
                 scr: 'https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit',
                 async: true,
                 defer: true
+            },
+            {
+                src: "https://www.googletagmanager.com/gtag/js?id=G-71TY1V8321",
+                async: true
             }
         ],
         link: [
@@ -82,6 +87,7 @@ module.exports = {
                 version: 2,
             }
         ],
+        "@nuxtjs/gtm",
     ],
 
     srcDir: 'app/',
