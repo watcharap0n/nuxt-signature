@@ -3,10 +3,6 @@
       class="d-flex justify-center"
   >
 
-    <div id="text-decoration">
-      หน้าหลัก / การให้บริการ / ระบบตรวจสอบเอกสารอิเล็กทรอนิกส์
-    </div>
-
     <div class="d-flex flex-column justify-space-between align-center">
       <div>
         <v-img
@@ -19,7 +15,7 @@
 
 
       <v-card flat>
-        <v-card-title><h2>ระบบตรวจสอบอิเล็กทรอนิกส์</h2></v-card-title>
+        <h3 style="margin-top: 10px">ระบบตรวจสอบอิเล็กทรอนิกส์</h3>
         <v-card-text>
           <v-file-input
               :rules="rules"
@@ -33,15 +29,22 @@
           ></v-file-input>
         </v-card-text>
 
+        <recaptcha
+            id="recaptcha"
+            @error="onError"
+            @success="onSuccess"
+            @expired="onExpired"
+        />
+
         <v-card-actions>
           <v-row>
             <v-col cols="6" sm="6">
               <v-btn
+                  :disabled="!btnSubmit"
                   block
-                  link
                   x-large
                   color="#68E7D6"
-                  @click="uploadPDF"
+                  @click="verifyCaptcha"
                   :loading="spin"
               >
                 ตรวจสอบไฟล์
@@ -62,6 +65,7 @@
         </v-card-actions>
       </v-card>
 
+
       <v-card-text>
         <div class="text-center">
           การตรวจสอบเอกสารดังกล่าว บริษัทยืนยันว่าไม่ได้มีการเก็บเอกสาร หรือเนื้อหาส่วนหนึ่งส่วนใดไว้ในระบบ
@@ -74,9 +78,15 @@
 </template>
 
 <script>
+import {env} from "@@/nuxt.config";
+
 export default {
+
   data() {
     return {
+      btnSubmit: false,
+      siteKey: env.siteKey,
+      secretKey: env.secretKey,
       temp: {},
       spin: false,
       transaction: {},
@@ -85,16 +95,27 @@ export default {
       file: null,
       rules: [
         value => !value || value.size < 10000000 || 'file size should be less than 10 MB!',
+        value => !!value || 'required.'
       ],
+    }
+  },
+
+  async mounted() {
+    try {
+      await this.$recaptcha.init()
+    } catch (e) {
+      console.error(e);
     }
   },
 
   methods: {
     async verify_exkasan(payload) {
-      const path = '/signature/verify/exkasan';
+      const path = 'https://lab.kanepro.co/signature/verify/exkasan';
       await this.$axios.post(path, payload)
           .then((res) => {
+            this.btnSubmit = false;
             this.transaction = res.data;
+            this.$recaptcha.reset();
             this.$router.push(
                 {
                   name: 'exkasan',
@@ -108,6 +129,8 @@ export default {
           })
           .catch((err) => {
             console.error(err);
+            this.$recaptcha.reset();
+            this.btnSubmit = false;
             this.spin = false;
           })
     },
@@ -115,7 +138,7 @@ export default {
     async uploadPDF() {
       this.spin = true;
       let formData = new FormData();
-      const path = '/signature/file/pdf/base64';
+      const path = 'https://lab.kanepro.co/signature/file/pdf/base64';
       let payload = {
         'pdf': this.pdf_enc,
         'reqRefNo': '1659405914',
@@ -137,7 +160,32 @@ export default {
             console.error(err);
             this.spin = false;
           })
-    }
+    },
+
+    onSuccess(token) {
+      console.log('Succeeded:', token)
+      this.btnSubmit = true;
+    },
+    onExpired() {
+      console.log('Expired')
+    },
+    onError(error) {
+      console.log('Error happened:', error)
+    },
+
+    async verifyCaptcha() {
+      try {
+        if (this.file) {
+          const token = await this.$recaptcha.getResponse();
+          const path = `/captcha-api/siteverify?secret=${this.secretKey}&response=${token}`;
+          const response = await this.$axios.$post(path);
+          await this.uploadPDF();
+          return response
+        }
+      } catch (error) {
+        console.log('Login error:', error);
+      }
+    },
   }
 
 }
@@ -145,14 +193,18 @@ export default {
 
 <style>
 
+#recaptcha {
+  margin-left: 50px;
+  margin-top: -30px;
+}
+
 #text-decoration {
+
   position: absolute;
   width: 562px;
   height: 19px;
-  left: 848px;
-  top: 118px;
-
-  margin-top: -30px;
+  margin-left: 848px;
+  margin-top: 30px;
 
   font-style: normal;
   font-weight: 400;
