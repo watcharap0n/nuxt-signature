@@ -1,5 +1,10 @@
 module.exports = {
-   server: {
+    env: {
+        siteKey: "6LddfEYhAAAAADasSiipmOoRrB3OSu3udtK4jFs1",
+        secretKey: "6LddfEYhAAAAABgnUADsj6g7x9WYMMxWMNJG_AnX"
+    },
+
+    server: {
         host: process.env.NUXT_HOST,
         port: process.env.NUXT_PORT,
     },
@@ -17,6 +22,16 @@ module.exports = {
             {
                 src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'
             },
+            {
+                src: 'https://www.google.com/recaptcha/api.js',
+                async: true,
+                defer: true
+            },
+            {
+                scr: 'https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit',
+                async: true,
+                defer: true
+            }
         ],
         link: [
             {
@@ -59,13 +74,30 @@ module.exports = {
     modules: [
         "@nuxtjs/axios",
         "bootstrap-vue/nuxt",
+        [
+            "@nuxtjs/recaptcha",
+            {
+                siteKey: '6LddfEYhAAAAADasSiipmOoRrB3OSu3udtK4jFs1',
+                language: 'en',
+                version: 2,
+            }
+        ],
     ],
 
     srcDir: 'app/',
     components: true,
 
     axios: {
-        baseURL: 'https://lab.kanepro.co'
+        baseURL: 'https://lab.kanepro.co',
+        proxy: true
     },
+    proxy: {
+        '/captcha-api/': {
+            target: 'https://www.google.com/recaptcha/api',
+            pathRewrite: {
+                '^/captcha-api': ""
+            }
+        }
+    }
 
 }
