@@ -90,6 +90,10 @@ module.exports = {
         "@nuxtjs/gtm",
     ],
 
+    gtm: {
+        id: 'GTM-71TY1V8321'
+    },
+
     srcDir: 'app/',
     components: true,
 
