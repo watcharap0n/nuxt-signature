@@ -71,6 +71,10 @@ module.exports = {
         ]
     },
 
+    plugins: [
+        '~/plugins/notifier.js'
+    ],
+
     buildModules: [
         "@nuxtjs/vuetify",
         "@nuxtjs/composition-api/module",
@@ -79,6 +83,7 @@ module.exports = {
     modules: [
         "@nuxtjs/axios",
         "bootstrap-vue/nuxt",
+        "vue-sweetalert2/nuxt",
         [
             "@nuxtjs/recaptcha",
             {

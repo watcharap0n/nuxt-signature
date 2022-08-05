@@ -81,7 +81,6 @@
 import {env} from "@@/nuxt.config";
 
 export default {
-
   data() {
     return {
       btnSubmit: false,
@@ -128,6 +127,10 @@ export default {
             this.spin = false;
           })
           .catch((err) => {
+            this.$notifier.showMessage({
+              content: 'Something wrong please try again.',
+              color: 'red'
+            })
             console.error(err);
             this.$recaptcha.reset();
             this.btnSubmit = false;
@@ -157,6 +160,10 @@ export default {
             this.verify_exkasan(payload);
           })
           .catch((err) => {
+            this.$notifier.showMessage({
+              content: 'Something wrong please try again.',
+              color: 'red'
+            })
             console.error(err);
             this.spin = false;
           })
@@ -183,6 +190,10 @@ export default {
           return response
         }
       } catch (error) {
+        this.$notifier.showMessage({
+          content: 'Something wrong please try again.',
+          color: 'red'
+        })
         console.log('Login error:', error);
       }
     },
