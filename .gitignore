@@ -1,0 +1,7 @@
+client/yarn.lock
+client/node_modules
+client/.nuxt
+.DStore
+.idea
+client/package-lock.json
+.env
