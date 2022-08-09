@@ -34,7 +34,7 @@
           <v-col sm="6">
 
             <div>
-              {{ $route.params.signature_service.file_name }}
+              {{ $route.params.signature_service.name }}
             </div>
 
             <div>
@@ -67,16 +67,18 @@
           </v-col>
 
           <v-col sm="6">
-            <div>
-              {{ $route.params.transaction.dsSignerCertificateDn.subjectDn.commonName }}
-            </div>
+            <div v-if="$route.params.transaction.dsSignerCertificateDn">
+              <div>
+                {{ $route.params.transaction.dsSignerCertificateDn.subjectDn.commonName }}
+              </div>
 
-            <div>
-              {{ $route.params.transaction.dsSignerCertificateDn.issuerDn.commonName }}
-            </div>
+              <div>
+                {{ $route.params.transaction.dsSignerCertificateDn.issuerDn.commonName }}
+              </div>
 
-            <div>
-              {{ $route.params.transaction.tsTrusted }}
+              <div>
+                {{ $route.params.transaction.tsTrusted }}
+              </div>
             </div>
           </v-col>
         </v-row>
@@ -104,17 +106,17 @@
       </v-row>
     </v-card-text>
 
-   <v-card-actions>
-     <v-btn
-         @click="$router.push('/')"
-         color="info"
-         rounded
-         small
-     >
-       กลับหน้าหลัก
-     </v-btn>
-     <v-spacer></v-spacer>
-   </v-card-actions>
+    <v-card-actions>
+      <v-btn
+          @click="$router.push('/')"
+          color="info"
+          rounded
+          small
+      >
+        กลับหน้าหลัก
+      </v-btn>
+      <v-spacer></v-spacer>
+    </v-card-actions>
 
   </v-container>
 </template>

@@ -13,9 +13,10 @@
         ></v-img>
       </div>
 
-
       <v-card flat>
-        <h3 style="margin-top: 10px">ระบบตรวจสอบอิเล็กทรอนิกส์</h3>
+        <div class="text-center p-2">
+          <h3 style="margin-top: 10px;">ระบบตรวจสอบอิเล็กทรอนิกส์</h3>
+        </div>
         <v-card-text>
           <v-file-input
               :rules="rules"
@@ -83,10 +84,10 @@ import {env} from "@@/nuxt.config";
 export default {
   data() {
     return {
+      baseURL: this.$config.baseURL,
       btnSubmit: false,
-      siteKey: env.siteKey,
-      secretKey: env.secretKey,
-      temp: {},
+      siteKey: this.$config.siteKey,
+      secretKey: this.$config.secretKey,
       spin: false,
       transaction: {},
       pdf_enc: null,
@@ -109,7 +110,7 @@ export default {
 
   methods: {
     async verify_exkasan(payload) {
-      const path = 'https://lab.kanepro.co/signature/verify/exkasan';
+      const path = `${this.baseURL}${this.$config.apiVerifyExkasan}`
       await this.$axios.post(path, payload)
           .then((res) => {
             this.btnSubmit = false;
@@ -120,16 +121,17 @@ export default {
                   name: 'exkasan',
                   params: {
                     transaction: this.transaction,
-                    signature_service: this.temp
+                    signature_service: this.file
                   }
                 }
             )
             this.spin = false;
           })
           .catch((err) => {
-            this.$notifier.showMessage({
-              content: 'Something wrong please try again.',
-              color: 'red'
+            this.$swal.fire({
+              icon: 'warning',
+              title: 'Oops...',
+              text: 'Something went wrong please try again.'
             })
             console.error(err);
             this.$recaptcha.reset();
@@ -141,28 +143,25 @@ export default {
     async uploadPDF() {
       this.spin = true;
       let formData = new FormData();
-      const path = 'https://lab.kanepro.co/signature/file/pdf/base64';
+      const path = `${this.baseURL}${this.$config.apiUploadPdf}`;
       let payload = {
         'pdf': this.pdf_enc,
-        'reqRefNo': '1659405914',
+        'reqRefNo': this.$config.refRefNo,
         'pdfPassword': this.pdf_pwd,
       }
-
       formData.append('file', this.file);
+      console.log(path)
       await this.$axios.post(path, formData)
           .then((res) => {
-            this.temp = {
-              file_content_type: res.data.file_content_type,
-              file_name: res.data.file_name,
-              file_size: res.data.file_size
-            }
+            console.log(res.data)
             payload.pdf = res.data.base64_enc;
             this.verify_exkasan(payload);
           })
           .catch((err) => {
-            this.$notifier.showMessage({
-              content: 'Something wrong please try again.',
-              color: 'red'
+            this.$swal.fire({
+              icon: 'warning',
+              title: 'Oops...',
+              text: 'Something went wrong please try again.'
             })
             console.error(err);
             this.spin = false;
@@ -170,7 +169,6 @@ export default {
     },
 
     onSuccess(token) {
-      console.log('Succeeded:', token)
       this.btnSubmit = true;
     },
     onExpired() {
@@ -190,9 +188,10 @@ export default {
           return response
         }
       } catch (error) {
-        this.$notifier.showMessage({
-          content: 'Something wrong please try again.',
-          color: 'red'
+        this.$swal.fire({
+          icon: 'warning',
+          title: 'Oops...',
+          text: 'Something went wrong please try again.',
         })
         console.log('Login error:', error);
       }
