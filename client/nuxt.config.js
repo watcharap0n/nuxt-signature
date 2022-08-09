@@ -1,7 +1,11 @@
 module.exports = {
-    env: {
-        siteKey: "6LddfEYhAAAAADasSiipmOoRrB3OSu3udtK4jFs1",
-        secretKey: "6LddfEYhAAAAABgnUADsj6g7x9WYMMxWMNJG_AnX"
+    publicRuntimeConfig: {
+        siteKey: process.env.SITKEY,
+        secretKey: process.env.SECRETKEY,
+        baseURL: process.env.BASE_URL,
+        apiVerifyExkasan: process.env.API_VERIFY_EXKASAN,
+        apiUploadPdf: process.env.API_UPLOAD_PDF,
+        refRefNo: process.env.REQREFNO,
     },
 
     server: {
@@ -103,7 +107,6 @@ module.exports = {
     components: true,
 
     axios: {
-        baseURL: 'https://lab.kanepro.co',
         proxy: true
     },
     proxy: {
