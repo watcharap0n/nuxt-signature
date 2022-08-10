@@ -5,3 +5,4 @@ client/.nuxt
 .idea
 client/package-lock.json
 .DS_Store
+.env
