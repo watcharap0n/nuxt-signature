@@ -4,5 +4,4 @@ client/.nuxt
 .DStore
 .idea
 client/package-lock.json
-.env
 .DS_Store
