@@ -26,4 +26,4 @@ deploy_dev:
     refs:
       - master
   script:
-    - echo deploy_dev
+    - curl -u ${RANCHER_STG_USER}:${RANCHER_STG_PASS} -X POST -H 'Accept:application/json' -H 'Content-Type:application/json' ${RANCHER_STG_ENDPOINT}'/v3/project/c-q6vf9:p-pbc6w/workload/deployment:tsa:web-validation-frontend?action=redeploy'
