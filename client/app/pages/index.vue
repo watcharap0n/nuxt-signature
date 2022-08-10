@@ -153,7 +153,6 @@ export default {
       console.log(path)
       await this.$axios.post(path, formData)
           .then((res) => {
-            console.log(res.data)
             payload.pdf = res.data.base64_enc;
             this.verify_exkasan(payload);
           })
