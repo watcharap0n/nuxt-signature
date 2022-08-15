@@ -1,110 +1,186 @@
 <template>
   <v-container>
 
-    <div id="text-decoration">
-      หน้าหลัก / การให้บริการ / ระบบตรวจสอบเอกสารอิเล็กทรอนิกส์
-    </div>
-
     <v-card
         flat
-        style="margin-top: 40px">
+        style="margin-top: 40px"
+        v-if="transaction"
+    >
+      <v-list>
+        <v-list-group
+            :value="true"
+            prepend-icon="mdi-file-account"
 
-      <v-card-title>
-        ข้อมูลลายเซนต์อิเล็กทรอนิกส์ (Digital Signature)
-      </v-card-title>
+        >
+          <template v-slot:activator>
+            <v-list-item-title>ข้อมูลลายเซนต์อิเล็กทรอนิกส์ (Digital Signature)</v-list-item-title>
+          </template>
 
-      <v-card-text>
-        <v-row
-            class="bg-light">
-          <v-col sm="6">
+          <v-list-group
+              v-for="(v, k) in transaction.signatures"
+              v-if="v.dsSignerCertificateDn"
+              :key="k"
+              :value="true"
+              no-action1
+              sub-group
+              prepend-icon="mdi-draw-pen"
+          >
+            <template v-slot:activator>
+              <v-list-item-content>
+                <v-list-item-title>Sign</v-list-item-title>
+              </v-list-item-content>
+            </template>
 
-            <div>
-              <strong>ชื่อไฟล์</strong>
-            </div>
+            <v-list-item link>
+              <v-list-item-content>
+                <v-list-item-title>ผู้ลงลายมือชื่อดิจิตอล</v-list-item-title>
+              </v-list-item-content>
 
-            <div>
-              <strong>จำนวนหลายเซ็นอิเล็กทรอนิกส์ทั้งหมด</strong>
-            </div>
+              <v-list-item-content>
+                {{ v.dsSignerCertificateDn.issuerDn.commonName }}
+              </v-list-item-content>
+            </v-list-item>
 
-            <div>
-              <strong>ผลการตรวจสอบ</strong>
-            </div>
+            <v-list-item link>
+              <v-list-item-content>
+                <v-list-item-title>วันออกใบรับรองอิเล็กทรอนิกส์</v-list-item-title>
+              </v-list-item-content>
 
-          </v-col>
-          <v-col sm="6">
+              <v-list-item-content>
+                {{ new Date(v.dsSignerCertificateDn.start) }}
+              </v-list-item-content>
+            </v-list-item>
 
-            <div>
-              {{ $route.params.signature_service.name }}
-            </div>
+            <v-list-item link>
+              <v-list-item-content>
+                <v-list-item-title>วันหมดอายุใบรับรองอิเล็กทรอนิกส์</v-list-item-title>
+              </v-list-item-content>
 
-            <div>
-              จำนวนลายเซ็นต์อิเล็กทรอนิกส์ที่ออกจากระบบ
-            </div>
+              <v-list-item-content>
+                {{ new Date(v.dsSignerCertificateDn.end) }}
+              </v-list-item-content>
+            </v-list-item>
 
-          </v-col>
-        </v-row>
-      </v-card-text>
+            <v-list-item link>
+              <v-list-item-content>
+                <v-list-item-title>ผลการตรวจสอบ</v-list-item-title>
+              </v-list-item-content>
 
-      <v-card-title>
-        ข้อมูลใบรับรองประทับเวลา (e-Timestamp)
-      </v-card-title>
+              <v-list-item-content>
+                <v-list-item-icon>
+                  <v-icon color="success">mdi-check-bold</v-icon>
+                </v-list-item-icon>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-group>
+        </v-list-group>
+      </v-list>
 
-      <v-card-text>
-        <v-row
-            class="bg-light">
-          <v-col sm="6">
-            <div>
-              <strong>ชื่อองค์กรประทับรับรองเวลา</strong>
-            </div>
+      <br>
+      <v-list>
+        <v-list-group
+            :value="true"
+            prepend-icon="mdi-file-account"
+        >
+          <template v-slot:activator>
+            <v-list-item-title>ข้อมูลใบรับรองประทับเวลา (e-Timestamp)</v-list-item-title>
+          </template>
 
-            <div>
-              <strong>ชื่อผู้ให้บริการใบรับรอง</strong>
-            </div>
+          <v-list-group
+              v-for="(v, k) in transaction.signatures"
+              :key="k"
+              v-if="!!v.dsSignerCertificateDn"
+              :value="true"
+              no-action1
+              sub-group
+              prepend-icon="mdi-timer-check-outline"
+          >
+            <template v-slot:activator>
+              <v-list-item-content>
+                <v-list-item-title>Timestamp</v-list-item-title>
+              </v-list-item-content>
+            </template>
 
-            <div>
-              <strong>ผลการตรวจสอบ</strong>
-            </div>
-          </v-col>
+            <v-list-item link>
+              <v-list-item-content>
+                <v-list-item-title>ชื่อองค์กรประทับรับรองเวลา</v-list-item-title>
+              </v-list-item-content>
 
-          <v-col sm="6">
-            <div v-if="$route.params.transaction.dsSignerCertificateDn">
-              <div>
-                {{ $route.params.transaction.dsSignerCertificateDn.subjectDn.commonName }}
-              </div>
+              <v-list-item-content>
+                <v-list-item-title>{{ v.tsSignerCertificateDn.subjectDn.commonName }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
 
-              <div>
-                {{ $route.params.transaction.dsSignerCertificateDn.issuerDn.commonName }}
-              </div>
+            <v-list-item link>
+              <v-list-item-content>
+                <v-list-item-title>ชื่อผู้ใหบริการใบรับรอง</v-list-item-title>
+              </v-list-item-content>
 
-              <div>
-                {{ $route.params.transaction.tsTrusted }}
-              </div>
-            </div>
-          </v-col>
-        </v-row>
-      </v-card-text>
+              <v-list-item-content>
+                <v-list-item-title>{{ v.tsSignerCertificateDn.issuerDn.commonName }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item link>
+              <v-list-item-content>
+                <v-list-item-title>วันออกใบรับรอง</v-list-item-title>
+              </v-list-item-content>
+
+              <v-list-item-content>
+                <v-list-item-title>{{ new Date(v.tsSignerCertificateDn.start) }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item link>
+              <v-list-item-content>
+                <v-list-item-title>วันหมดอายุใบรับรองอิเล็กทรอนิกส์</v-list-item-title>
+              </v-list-item-content>
+
+              <v-list-item-content>
+                <v-list-item-title>{{ new Date(v.tsSignerCertificateDn.end) }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item link>
+              <v-list-item-content>
+                <v-list-item-title>ผลการตรวจสอบ</v-list-item-title>
+              </v-list-item-content>
+
+              <v-list-item-content>
+                <v-list-item-icon>
+                  <v-icon color="success">mdi-check-bold</v-icon>
+                </v-list-item-icon>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-group>
+        </v-list-group>
+      </v-list>
+
+      <br>
+      <v-expansion-panels
+          multiple
+          flat
+          v-model="panel"
+      >
+        <v-expansion-panel>
+          <v-expansion-panel-header class="bg-light">ข้อมูล Blockchain</v-expansion-panel-header>
+          <v-expansion-panel-content>
+            <v-row>
+              <v-col sm="6">
+                <div class="p-2">
+                  Transaction ID
+                </div>
+                <div class="p-2">
+                  ผลการตรวจสอบ
+                </div>
+              </v-col>
+
+              <v-divider vertical></v-divider>
+            </v-row>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels>
     </v-card>
-
-    <v-card-title>
-      ข้อมูล Blockchain
-    </v-card-title>
-
-    <v-card-text>
-      <v-row
-          class="bg-light">
-        <v-col sm="6">
-          <div>
-            <strong>Tax ID</strong>
-          </div>
-
-          <div>
-            <strong>ผลการตรวจสอบ</strong>
-          </div>
-        </v-col>
-
-        <v-col sm="6"></v-col>
-      </v-row>
-    </v-card-text>
 
     <v-card-actions>
       <v-btn
@@ -126,7 +202,12 @@
 export default {
   data() {
     return {
-      transaction: []
+      panel: [0, 1],
+    }
+  },
+  computed: {
+    transaction() {
+      return this.$route.params.transaction
     }
   },
   methods: {}
