@@ -6,3 +6,6 @@ client/.nuxt
 client/package-lock.json
 .DS_Store
 .env
+dist
+client/dist
+client/app/static
