@@ -20,7 +20,7 @@
               v-if="v.dsSignerCertificateDn"
               :key="k"
               :value="true"
-              no-action1
+              no-action
               sub-group
               prepend-icon="mdi-draw-pen"
           >
@@ -73,11 +73,11 @@
             </v-list-item>
 
             <v-list-group
+                v-if="v.tsSignerCertificateDn"
                 :value="true"
-                no-action1
+                no-action
                 sub-group
                 prepend-icon="mdi-timer-check-outline"
-                v-if="v.tsSignerCertificateDn"
             >
               <template v-slot:activator>
                 <v-list-item-content>
@@ -166,7 +166,7 @@
               :key="k"
               v-if="!v.dsSignerCertificateDn"
               :value="true"
-              no-action1
+              no-action
               sub-group
               prepend-icon="mdi-timer-check-outline"
           >
