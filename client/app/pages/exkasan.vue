@@ -6,7 +6,7 @@
         style="margin-top: 40px"
         v-if="transaction"
     >
-      <v-list>
+      <v-list class="bg-light">
         <v-list-group
             :value="true"
             prepend-icon="mdi-file-account"
@@ -67,19 +67,95 @@
 
               <v-list-item-content>
                 <v-list-item-icon>
-                  <v-icon color="success">mdi-check-bold</v-icon>
+                  <v-icon color="success" v-text="v.dsTrusted ? 'mdi-check-bold': 'mdi-window-close'"></v-icon>
                 </v-list-item-icon>
               </v-list-item-content>
             </v-list-item>
+
+            <v-list-group
+                :value="true"
+                no-action1
+                sub-group
+                prepend-icon="mdi-timer-check-outline"
+                v-if="v.tsSignerCertificateDn"
+            >
+              <template v-slot:activator>
+                <v-list-item-content>
+                  <v-list-item-title>Embedded Timestamp</v-list-item-title>
+                </v-list-item-content>
+              </template>
+
+              <v-list-item link>
+                <v-list-item-content>
+                  <v-list-item-title>ผลการตรวจสอบการประทับรับรองเวลา</v-list-item-title>
+                </v-list-item-content>
+
+                <v-list-item-content>
+                  <v-list-item-title>{{ v.tsSignerCertificateDn.subjectDn.organization }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+
+              <v-list-item link>
+                <v-list-item-content>
+                  <v-list-item-title>หน่วยงานผู้ประทับรับรองเวลา</v-list-item-title>
+                </v-list-item-content>
+
+                <v-list-item-content>
+                  <v-list-item-title>{{ v.tsSignerCertificateDn.subjectDn.commonName }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+
+              <v-list-item link>
+                <v-list-item-content>
+                  <v-list-item-title>ผู้ออกใบรับรองอิเล็กทรอนิกส์</v-list-item-title>
+                </v-list-item-content>
+
+                <v-list-item-content>
+                  <v-list-item-title>{{ v.tsSignerCertificateDn.issuerDn.commonName }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+
+              <v-list-item link>
+                <v-list-item-content>
+                  <v-list-item-title>วันออกใบรับรอง</v-list-item-title>
+                </v-list-item-content>
+
+                <v-list-item-content>
+                  <v-list-item-title>{{ new Date(v.tsSignerCertificateDn.start) }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+
+              <v-list-item link>
+                <v-list-item-content>
+                  <v-list-item-title>วันหมดอายุใบรับรองอิเล็กทรอนิกส์</v-list-item-title>
+                </v-list-item-content>
+
+                <v-list-item-content>
+                  <v-list-item-title>{{ new Date(v.tsSignerCertificateDn.end) }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+
+              <v-list-item link>
+                <v-list-item-content>
+                  <v-list-item-title>ผลการตรวจสอบการประทับรับรองเวลา</v-list-item-title>
+                </v-list-item-content>
+
+                <v-list-item-content>
+                  <v-list-item-icon>
+                    <v-icon color="success" v-text="v.tsTrusted ? 'mdi-check-bold': 'mdi-window-close'"></v-icon>
+                  </v-list-item-icon>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-group>
           </v-list-group>
         </v-list-group>
       </v-list>
 
       <br>
-      <v-list>
+      <v-list class="bg-light">
         <v-list-group
             :value="true"
-            prepend-icon="mdi-clipboard-text-clock-outline"
+            prepend-icon="mdi-file-account"
         >
           <template v-slot:activator>
             <v-list-item-title>ข้อมูลใบรับรองประทับเวลา (e-Timestamp)</v-list-item-title>
@@ -147,7 +223,7 @@
 
               <v-list-item-content>
                 <v-list-item-icon>
-                  <v-icon color="success">mdi-check-bold</v-icon>
+                  <v-icon color="success" v-text="v.tsTrusted ? 'mdi-check-bold': 'mdi-window-close'"></v-icon>
                 </v-list-item-icon>
               </v-list-item-content>
             </v-list-item>
@@ -187,6 +263,7 @@
           color="info"
           rounded
           small
+          text
       >
         กลับหน้าหลัก
       </v-btn>
