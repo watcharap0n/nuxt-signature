@@ -10,7 +10,6 @@
         <v-list-group
             :value="true"
             prepend-icon="mdi-file-account"
-
         >
           <template v-slot:activator>
             <v-list-item-title>ข้อมูลลายเซนต์อิเล็กทรอนิกส์ (Digital Signature)</v-list-item-title>
@@ -80,7 +79,7 @@
       <v-list>
         <v-list-group
             :value="true"
-            prepend-icon="mdi-file-account"
+            prepend-icon="mdi-clipboard-text-clock-outline"
         >
           <template v-slot:activator>
             <v-list-item-title>ข้อมูลใบรับรองประทับเวลา (e-Timestamp)</v-list-item-title>
