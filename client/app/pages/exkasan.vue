@@ -89,7 +89,7 @@
           <v-list-group
               v-for="(v, k) in transaction.signatures"
               :key="k"
-              v-if="!!v.dsSignerCertificateDn"
+              v-if="!v.dsSignerCertificateDn"
               :value="true"
               no-action1
               sub-group
