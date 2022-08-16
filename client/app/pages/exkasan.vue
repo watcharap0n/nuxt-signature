@@ -77,7 +77,7 @@
                 no-action1
                 sub-group
                 prepend-icon="mdi-timer-check-outline"
-                v-if="v.tsSignerCertificateDn1"
+                v-if="v.tsSignerCertificateDn"
             >
               <template v-slot:activator>
                 <v-list-item-content>
