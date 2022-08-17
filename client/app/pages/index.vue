@@ -27,7 +27,8 @@
               outlined
               show-size
               accept="application/pdf"
-          ></v-file-input>
+          >
+          </v-file-input>
         </v-card-text>
 
         <recaptcha
@@ -66,7 +67,6 @@
         </v-card-actions>
       </v-card>
 
-
       <v-card-text>
         <div class="text-center">
           การตรวจสอบเอกสารดังกล่าว บริษัทยืนยันว่าไม่ได้มีการเก็บเอกสาร หรือเนื้อหาส่วนหนึ่งส่วนใดไว้ในระบบ
@@ -84,6 +84,7 @@ import {env} from "@@/nuxt.config";
 export default {
   data() {
     return {
+      handleEvent: false,
       baseURL: this.$config.baseURL,
       btnSubmit: false,
       siteKey: this.$config.siteKey,
@@ -94,7 +95,6 @@ export default {
       pdf_pwd: '',
       file: null,
       rules: [
-        value => !value || value.size < 10000000 || 'file size should be less than 10 MB!',
         value => !!value || 'required.'
       ],
     }
@@ -109,9 +109,12 @@ export default {
   },
 
   methods: {
-    async verify_exkasan(payload) {
+    async validate_exkasan() {
+      this.spin = true;
+      let formData = new FormData();
+      formData.append('file', this.file);
       const path = `${this.baseURL}${this.$config.apiVerifyExkasan}`
-      await this.$axios.post(path, payload)
+      await this.$axios.post(path, formData)
           .then((res) => {
             this.btnSubmit = false;
             this.transaction = res.data;
@@ -125,7 +128,6 @@ export default {
                   }
                 }
             )
-            this.spin = false;
           })
           .catch((err) => {
             this.$swal.fire({
@@ -138,32 +140,20 @@ export default {
             this.btnSubmit = false;
             this.spin = false;
           })
+      this.spin = false;
     },
 
-    async uploadPDF() {
-      this.spin = true;
-      let formData = new FormData();
-      const path = `${this.baseURL}${this.$config.apiUploadPdf}`;
-      let payload = {
-        'pdf': this.pdf_enc,
-        'reqRefNo': this.$config.refRefNo,
-        'pdfPassword': this.pdf_pwd,
-      }
-      formData.append('file', this.file);
+    async handleFile() {
+      const path = `${this.baseURL}${this.$config.apiHandelFile}`
       console.log(path)
+      let formData = new FormData()
+      formData.append('file', this.file)
       await this.$axios.post(path, formData)
           .then((res) => {
-            payload.pdf = res.data.base64_enc;
-            this.verify_exkasan(payload);
+            console.log(res.data)
           })
           .catch((err) => {
-            this.$swal.fire({
-              icon: 'warning',
-              title: 'Oops...',
-              text: 'Something went wrong please try again.'
-            })
-            console.error(err);
-            this.spin = false;
+            console.error(err)
           })
     },
 
@@ -183,7 +173,7 @@ export default {
           const token = await this.$recaptcha.getResponse();
           const path = `/captcha-api/siteverify?secret=${this.secretKey}&response=${token}`;
           const response = await this.$axios.$post(path);
-          await this.uploadPDF();
+          await this.validate_exkasan();
           return response
         }
       } catch (error) {

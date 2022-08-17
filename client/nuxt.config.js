@@ -1,11 +1,11 @@
 module.exports = {
     publicRuntimeConfig: {
-        siteKey: process.env.SITKEY,
+        siteKey: process.env.SITEKEY,
         secretKey: process.env.SECRETKEY,
         baseURL: process.env.BASE_URL,
         apiVerifyExkasan: process.env.API_VERIFY_EXKASAN,
         apiUploadPdf: process.env.API_UPLOAD_PDF,
-        refRefNo: process.env.REQREFNO,
+        apiHandelFile: process.env.API_HANDLE_FILE,
     },
 
     server: {
