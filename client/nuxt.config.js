@@ -77,7 +77,8 @@ module.exports = {
     },
 
     plugins: [
-        '~/plugins/notifier.js'
+        '~/plugins/notifier.js',
+        {src: '~/plugins/vue-device.js'}
     ],
 
     buildModules: [

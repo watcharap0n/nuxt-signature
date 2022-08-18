@@ -116,6 +116,8 @@
 </template>
 
 <script>
+import liff from '@line/liff'
+
 export default {
   data() {
     return {
@@ -141,6 +143,9 @@ export default {
 
   async mounted() {
     try {
+      if (this.$device.android || this.$device.ios) {
+        await this.initialized();
+      }
       await this.$recaptcha.init()
     } catch (e) {
       console.error(e);
@@ -148,6 +153,20 @@ export default {
   },
 
   methods: {
+    async initialized() {
+      await liff.init({liffId: this.$config.liffId},
+          () => {
+            if (liff.isLoggedIn()) {
+              liff.getProfile()
+                  .then((profile) => {
+                    console.log(profile)
+                  })
+            } else {
+              liff.login();
+            }
+          });
+    },
+
     async validate_exkasan() {
       this.spin = true;
       const path = `${this.baseURL}${this.$config.apiVerifyExkasan}`
