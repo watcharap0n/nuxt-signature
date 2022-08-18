@@ -7,7 +7,7 @@
       <div>
         <v-img
             style="margin-top: 100px"
-            :src="require('~/assets/images/ex.png')"
+            :src="require('~/assets/images/ex-min.png')"
             width="255"
             height="175"
         ></v-img>
@@ -17,26 +17,63 @@
         <div class="text-center p-2">
           <h3 style="margin-top: 10px;">ระบบตรวจสอบอิเล็กทรอนิกส์</h3>
         </div>
-        <v-card-text>
-          <v-file-input
-              :rules="rules"
-              v-model="file"
-              label="เลือกไฟล์"
-              color="#D0DA52"
-              prepend-icon="mdi-paperclip"
-              outlined
-              show-size
-              accept="application/pdf"
-          >
-          </v-file-input>
-        </v-card-text>
 
-        <recaptcha
-            id="recaptcha"
-            @error="onError"
-            @success="onSuccess"
-            @expired="onExpired"
-        />
+        <v-card
+            @mouseenter="dragover = true"
+            @mouseleave="dragover = false"
+            @drop.prevent="onDrop($event)"
+            @dragover.prevent="dragover = true"
+            @dragenter.prevent="dragover = true"
+            @dragleave.prevent="dragover = false"
+            :class="{ 'grey lighten-2': dragover }"
+        >
+          <input type="file" hidden @change="onDrop($event)" accept="application/pdf" ref="file"/>
+          <v-card-text
+              @click="$refs.file.click()"
+              for="assetsFieldHandle" class="block cursor-pointer">
+            <v-row
+                for="assetsFieldHandle"
+                class="d-flex flex-column"
+                dense align="center"
+                justify="center"
+            >
+              <v-icon
+                  :class="[dragover ? 'mt-2, mb-6' : 'mt-5']"
+                  size="60"
+                  :color="`${dragover ? 'lime': ''}`"
+              >
+                mdi-cloud-upload
+              </v-icon>
+              <p>
+                ลากไฟล์มาวางที่นี่ หรือ คลิกอัพโหลดไฟล์
+              </p>
+            </v-row>
+            <div class="text-center">
+              <v-chip class="ma-2"
+                      color="lime"
+                      dark
+                      v-if="file"
+                      close
+                      @click:close="file = null"
+              >
+                <v-icon left>
+                  mdi-file-pdf-box
+                </v-icon>
+                {{ file.name }} size: {{ Math.round(file.size / 1000) }}KB
+              </v-chip>
+            </div>
+          </v-card-text>
+        </v-card>
+        <br>
+        <br>
+        <div style="margin-left: -30px">
+          <recaptcha
+              id="recaptcha"
+              @error="onError"
+              @success="onSuccess"
+              @expired="onExpired"
+          />
+        </div>
 
         <v-card-actions>
           <v-row>
@@ -79,17 +116,18 @@
 </template>
 
 <script>
-import {env} from "@@/nuxt.config";
-
 export default {
   data() {
     return {
+      hideProgress: false,
+      progress: 0,
       handleEvent: false,
       baseURL: this.$config.baseURL,
       btnSubmit: false,
       siteKey: this.$config.siteKey,
       secretKey: this.$config.secretKey,
       spin: false,
+      dragover: false,
       transaction: {},
       pdf_enc: null,
       pdf_pwd: '',
@@ -112,10 +150,16 @@ export default {
   methods: {
     async validate_exkasan() {
       this.spin = true;
+      const path = `${this.baseURL}${this.$config.apiVerifyExkasan}`
+      const config = {
+        onUploadProgress: function (progressEvent) {
+          this.progress = parseInt(Math.round((progressEvent.loaded * 100) / progressEvent.total))
+          this.hideProgress = true
+        }.bind(this)
+      }
       let formData = new FormData();
       formData.append('file', this.file);
-      const path = `${this.baseURL}${this.$config.apiVerifyExkasan}`
-      await this.$axios.post(path, formData)
+      await this.$axios.post(path, formData, config)
           .then((res) => {
             this.btnSubmit = false;
             this.transaction = res.data;
@@ -156,6 +200,27 @@ export default {
           .catch((err) => {
             console.error(err)
           })
+    },
+
+    onDrop(e) {
+      this.dragover = false;
+      try {
+        if (e.dataTransfer.files.length > 1) {
+          this.$notifier.showMessage({
+            color: 'red',
+            content: 'คุณสามารถอัพโหลดได้เพียงแค่ 1 ไฟล์'
+          })
+        } else if (e.dataTransfer.files[0].type !== 'application/pdf') {
+          this.$notifier.showMessage({
+            color: 'red',
+            content: 'ต้องเป็นไฟล์ PDF เท่านั้น'
+          })
+        } else {
+          this.file = e.dataTransfer.files[0]
+        }
+      } catch {
+        this.file = this.$refs.file.files[0]
+      }
     },
 
     onSuccess(token) {
