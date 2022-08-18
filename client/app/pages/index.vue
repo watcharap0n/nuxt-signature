@@ -95,7 +95,8 @@ export default {
       pdf_pwd: '',
       file: null,
       rules: [
-        value => !!value || 'required.'
+        value => !!value || 'required.',
+        value => !value || value.size < 100000000 || 'file size should be less than 10 MB!'
       ],
     }
   },
