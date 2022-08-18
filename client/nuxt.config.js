@@ -93,7 +93,7 @@ module.exports = {
         [
             "@nuxtjs/recaptcha",
             {
-                siteKey: process.env.SITKEY,
+                siteKey: process.env.SITEKEY,
                 language: 'en',
                 version: 2,
             }
