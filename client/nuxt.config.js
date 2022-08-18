@@ -6,6 +6,7 @@ module.exports = {
         apiVerifyExkasan: process.env.API_VERIFY_EXKASAN,
         apiUploadPdf: process.env.API_UPLOAD_PDF,
         apiHandelFile: process.env.API_HANDLE_FILE,
+        liffId: process.env.LIFFID
     },
 
     server: {
