@@ -188,20 +188,6 @@ export default {
       this.spin = false;
     },
 
-    async handleFile() {
-      const path = `${this.baseURL}${this.$config.apiHandelFile}`
-      console.log(path)
-      let formData = new FormData()
-      formData.append('file', this.file)
-      await this.$axios.post(path, formData)
-          .then((res) => {
-            console.log(res.data)
-          })
-          .catch((err) => {
-            console.error(err)
-          })
-    },
-
     onDrop(e) {
       this.dragover = false;
       try {
