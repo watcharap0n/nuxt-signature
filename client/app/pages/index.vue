@@ -116,7 +116,7 @@
 </template>
 
 <script>
-import liff from '@line/liff'
+import liff from '@line/liff';
 
 export default {
   data() {
@@ -146,7 +146,7 @@ export default {
       if (this.$device.android || this.$device.ios) {
         await this.initialized();
       }
-      await this.$recaptcha.init()
+      await this.$recaptcha.init();
     } catch (e) {
       console.error(e);
     }
@@ -183,15 +183,25 @@ export default {
             this.btnSubmit = false;
             this.transaction = res.data;
             this.$recaptcha.reset();
-            this.$router.push(
-                {
-                  name: 'exkasan',
-                  params: {
-                    transaction: this.transaction,
-                    signature_service: this.file
+            if (!this.transaction.signatures || !!this.transaction.signatures) {
+              this.$swal.fire({
+                icon: 'error',
+                title: 'Signature not found.',
+                text: 'please try again.',
+              })
+              this.transaction.signatures = null
+              this.file = null
+            } else {
+              this.$router.push(
+                  {
+                    name: 'exkasan',
+                    params: {
+                      transaction: this.transaction,
+                      signature_service: this.file
+                    }
                   }
-                }
-            )
+              )
+            }
           })
           .catch((err) => {
             this.$swal.fire({
@@ -257,7 +267,6 @@ export default {
       }
     },
   }
-
 }
 </script>
 
