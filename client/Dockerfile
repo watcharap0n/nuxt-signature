@@ -1,5 +1,5 @@
-# FROM node:12.16.3-alpine3.9
-FROM node:16.17.0
+FROM node:12.16.3-alpine3.9
+# FROM node:16.17.0
 ARG SITEKEY
 # ENV SITEKEY ${SITEKEY}
 # ENV SITEKEY 6LddfEYhAAAAADasSiipmOoRrB3OSu3udtK4jFs1
