@@ -183,7 +183,7 @@ export default {
             this.btnSubmit = false;
             this.transaction = res.data;
             this.$recaptcha.reset();
-            if (!this.transaction.signatures || !!this.transaction.signatures) {
+            if (!this.transaction.signatures) {
               this.$swal.fire({
                 icon: 'error',
                 title: 'Signature not found.',
