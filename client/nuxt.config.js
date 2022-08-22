@@ -17,7 +17,7 @@ module.exports = {
     ssr: false,
 
     head: {
-        titleTemplate: 'E-Documents',
+        titleTemplate: 'Exkasan',
         meta: [
             {charset: 'utf-8'},
             {name: 'viewport', content: 'width=device-width, initial-scale=1'},
@@ -43,6 +43,7 @@ module.exports = {
                 async: true
             }
         ],
+
         link: [
             {
                 rel: 'icon',
@@ -76,29 +77,42 @@ module.exports = {
         ]
     },
 
+    babel: {
+        "plugins": [["component", [
+            {
+                "libraryName": "element-ui",
+                "styleLibraryName": "theme-default"
+            },
+            'transform-async-to-generator',
+            'transform-runtime'
+        ]]],
+        comments: true
+    },
+
     plugins: [
         '~/plugins/notifier.js',
-        {src: '~/plugins/vue-device.js'}
+        {src: '~/plugins/vue-device.js'},
     ],
 
     buildModules: [
         "@nuxtjs/vuetify",
-        "@nuxtjs/composition-api/module",
+        "@nuxtjs/composition-api/module"
     ],
 
     modules: [
-        "@nuxtjs/axios",
-        "bootstrap-vue/nuxt",
-        "vue-sweetalert2/nuxt",
+        '@nuxtjs/tailwindcss',
+        '@nuxtjs/axios',
+        'bootstrap-vue/nuxt',
+        'vue-sweetalert2/nuxt',
         [
-            "@nuxtjs/recaptcha",
+            '@nuxtjs/recaptcha',
             {
                 siteKey: process.env.SITEKEY,
                 language: 'en',
-                version: 2,
+                version: 2
             }
         ],
-        "@nuxtjs/gtm",
+        '@nuxtjs/gtm'
     ],
 
     gtm: {
@@ -119,5 +133,4 @@ module.exports = {
             }
         }
     }
-
 }
