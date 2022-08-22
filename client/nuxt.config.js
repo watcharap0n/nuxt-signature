@@ -41,6 +41,9 @@ module.exports = {
             {
                 src: "https://www.googletagmanager.com/gtag/js?id=G-71TY1V8321",
                 async: true
+            },
+            {
+                src: 'https://cdn.tailwindcss.com'
             }
         ],
 
@@ -77,18 +80,6 @@ module.exports = {
         ]
     },
 
-    babel: {
-        "plugins": [["component", [
-            {
-                "libraryName": "element-ui",
-                "styleLibraryName": "theme-default"
-            },
-            'transform-async-to-generator',
-            'transform-runtime'
-        ]]],
-        comments: true
-    },
-
     plugins: [
         '~/plugins/notifier.js',
         {src: '~/plugins/vue-device.js'},
@@ -100,7 +91,6 @@ module.exports = {
     ],
 
     modules: [
-        '@nuxtjs/tailwindcss',
         '@nuxtjs/axios',
         'bootstrap-vue/nuxt',
         'vue-sweetalert2/nuxt',
