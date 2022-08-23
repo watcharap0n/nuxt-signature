@@ -1,4 +1,34 @@
 module.exports = {
+    build: {
+        html: {
+            minify: {
+                collapseBooleanAttributes: true,
+                decodeEntities: true,
+                minifyCSS: true,
+                minifyJS: true,
+                processConditionalComments: true,
+                removeEmptyAttributes: true,
+                removeRedundantAttributes: true,
+                trimCustomFragments: true,
+                useShortDoctype: true
+            }
+        },
+        filenames: {
+            app: ({
+                      isDev,
+                      isModern
+                  }) => isDev ? `[name]${isModern ? '.modern' : ''}.js` : `[contenthash:7]${isModern ? '.modern' : ''}.js`,
+            chunk: ({
+                        isDev,
+                        isModern
+                    }) => isDev ? `[name]${isModern ? '.modern' : ''}.js` : `[contenthash:7]${isModern ? '.modern' : ''}.js`,
+            css: ({isDev}) => isDev ? '[name].css' : 'css/[contenthash:7].css',
+            img: ({isDev}) => isDev ? '[path][name].[ext]' : 'img/[name].[contenthash:7].[ext]',
+            font: ({isDev}) => isDev ? '[path][name].[ext]' : 'fonts/[name].[contenthash:7].[ext]',
+            video: ({isDev}) => isDev ? '[path][name].[ext]' : 'videos/[name].[contenthash:7].[ext]'
+        }
+    },
+
     publicRuntimeConfig: {
         siteKey: process.env.SITEKEY,
         secretKey: process.env.SECRETKEY,
@@ -11,7 +41,7 @@ module.exports = {
 
     server: {
         host: process.env.NUXT_HOST,
-        port: process.env.NUXT_PORT,
+        port: process.env.NUXT_PORT
     },
 
     ssr: false,
@@ -82,7 +112,7 @@ module.exports = {
 
     plugins: [
         '~/plugins/notifier.js',
-        {src: '~/plugins/vue-device.js'},
+        {src: '~/plugins/vue-device.js'}
     ],
 
     buildModules: [
