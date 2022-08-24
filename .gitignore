@@ -8,3 +8,5 @@ client/package-lock.json
 dist
 client/dist
 client/app/static
+client/nuxt-dist
+client/nuxt-validate-exkasan

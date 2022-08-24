@@ -114,8 +114,8 @@
 
                 <v-list-item-content>
                   <v-list-item-icon>
-                    <v-icon left color="success" v-text="v.dsTrusted ? 'mdi-check-bold': ''"></v-icon>
-                    <div v-text="v.dsTrusted ? 'Trusted': '-'"></div>
+                    <v-icon left color="success" v-text="v.dsCertPathTrusted ? 'mdi-check-bold': ''"></v-icon>
+                    <div v-text="v.dsCertPathTrusted ? 'Trusted': '-'"></div>
                   </v-list-item-icon>
                 </v-list-item-content>
               </v-list-item>
@@ -173,8 +173,8 @@
 
                 <v-list-item-content>
                   <v-list-item-icon>
-                    <v-icon left color="success" v-text="v.tsTrusted ? 'mdi-check-bold': ''"></v-icon>
-                    <div v-text="v.tsTrusted ? 'Trusted': '-'"></div>
+                    <v-icon left color="success" v-text="v.tsCertPathTrusted ? 'mdi-check-bold': ''"></v-icon>
+                    <div v-text="v.tsCertPathTrusted ? 'Trusted': '-'"></div>
                   </v-list-item-icon>
                 </v-list-item-content>
               </v-list-item>
