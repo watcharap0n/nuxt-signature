@@ -53,15 +53,6 @@
             </v-list-item-content>
           </v-list-item>
 
-          <v-list-item link>
-            <v-list-item-content>
-              <v-list-item-title>จำนวนลายเซ็นต์ดิจิทัลที่ออกจากระบบ YourSign</v-list-item-title>
-            </v-list-item-content>
-
-            <v-list-item-content>
-              <v-list-item-title></v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
 
           <v-list-item link>
             <v-list-item-content>
@@ -73,15 +64,6 @@
             </v-list-item-content>
           </v-list-item>
 
-          <v-list-item link>
-            <v-list-item-content>
-              <v-list-item-title>จำนวนการประทับรับรองเวลาที่ออกจากระบบ Advancert</v-list-item-title>
-            </v-list-item-content>
-
-            <v-list-item-content>
-              <v-list-item-title></v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
         </div>
       </v-list-group>
     </v-list>
@@ -89,7 +71,7 @@
     <v-list>
       <v-list-group
           :value="true"
-          prepend-icon="mdi-file-pdf-box"
+          prepend-icon="mdi-file-document-check"
           no-action
           style="background: #D0DA52; stroke: black; border-radius: 10px"
           color="black"
@@ -106,11 +88,21 @@
         <div class="bg-light">
           <v-list-item link>
             <v-list-item-content>
-              <v-list-item-title>ชื่อไฟล์</v-list-item-title>
+              <v-list-item-title>จำนวนลายเซ็นต์ดิจิทัลที่ออกจากระบบ YourSign</v-list-item-title>
             </v-list-item-content>
 
             <v-list-item-content>
-              <v-list-item-title>{{ filename.name }}</v-list-item-title>
+              <v-list-item-title></v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-list-item link>
+            <v-list-item-content>
+              <v-list-item-title>จำนวนการประทับรับรองเวลาที่ออกจากระบบ Advancert</v-list-item-title>
+            </v-list-item-content>
+
+            <v-list-item-content>
+              <v-list-item-title v-if="countAvancert > 0">{{ countAvancert }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </div>
@@ -146,7 +138,7 @@
                 <v-list-item-content>
                   <v-list-item-icon>
                     <v-icon left color="success" v-text="v.dsCertPathTrusted ? 'mdi-check-bold': ''"></v-icon>
-                    <div v-text="v.dsCertPathTrusted ? 'Trusted': '-'"></div>
+                    <div v-text="v.dsCertPathTrusted ? 'Trusted': 'ไม่พบลายมือชื่อดิจิทัลในระบบ Exkasan'"></div>
                   </v-list-item-icon>
                 </v-list-item-content>
               </v-list-item>
@@ -205,7 +197,7 @@
                 <v-list-item-content>
                   <v-list-item-icon>
                     <v-icon left color="success" v-text="v.tsCertPathTrusted ? 'mdi-check-bold': ''"></v-icon>
-                    <div v-text="v.tsCertPathTrusted ? 'Trusted': 'ไม่พบลายมือชื่อดิจิทัลในระบบ Exkasan'"></div>
+                    <div v-text="v.tsCertPathTrusted ? 'Trusted': 'ไม่พบการประทับรับรองเวลาในระบบ Exkasan'"></div>
                   </v-list-item-icon>
                 </v-list-item-content>
               </v-list-item>
@@ -416,6 +408,8 @@ import Overlay from "@/components/Overlay";
 export default {
   data() {
     return {
+      countAvancert: 0,
+      countYourSign: 0,
       dsSign: 0,
       tsSign: 0,
       panel: [0, 1],
@@ -442,8 +436,8 @@ export default {
           }
           if (val.tsSignerCertificateDn) {
             if (val.tsSignerCertificateDn.subjectDn.commonName === 'Advancert by ThaiAI') {
-              num += 1
-              if (num === 1)
+              this.countAvancert += 1
+              if (this.countAvancert === 1)
                 text += 'text-lime-700'
             }
           }
