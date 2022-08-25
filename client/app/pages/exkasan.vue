@@ -174,7 +174,7 @@
                 <v-list-item-content>
                   <v-list-item-icon>
                     <v-icon left color="success" v-text="v.tsCertPathTrusted ? 'mdi-check-bold': ''"></v-icon>
-                    <div v-text="v.tsCertPathTrusted ? 'Trusted': '-'"></div>
+                    <div v-text="v.tsCertPathTrusted ? 'Trusted': 'ไม่พบลายมือชื่อดิจิทัลในระบบ Exkasan'"></div>
                   </v-list-item-icon>
                 </v-list-item-content>
               </v-list-item>
@@ -262,8 +262,8 @@
 
                 <v-list-item-content>
                   <v-list-item-icon>
-                    <v-icon left color="success" v-text="v.tsTrusted ? 'mdi-check-bold': ''"></v-icon>
-                    <div v-text="v.tsTrusted ? 'Trusted': '-'"></div>
+                    <v-icon left color="success" v-text="v.tsCertPathTrusted ? 'mdi-check-bold': ''"></v-icon>
+                    <div v-text="v.tsCertPathTrusted ? 'Trusted': 'ไม่พบการประทับรับรองเวลาในระบบ Exkasan'"></div>
                   </v-list-item-icon>
                 </v-list-item-content>
               </v-list-item>
