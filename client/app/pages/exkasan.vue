@@ -86,6 +86,37 @@
       </v-list-group>
     </v-list>
 
+    <v-list>
+      <v-list-group
+          :value="true"
+          prepend-icon="mdi-file-pdf-box"
+          no-action
+          style="background: #D0DA52; stroke: black; border-radius: 10px"
+          color="black"
+      >
+        <template v-slot:activator>
+          <v-list-item-content>
+            <v-list-item-title
+                style="color: black"
+            >ข้อมูลลายเซ็นต์ดิจิทัลและการประทับรับรองเวลาที่ออกจากระบบ Exkasan
+            </v-list-item-title>
+          </v-list-item-content>
+        </template>
+
+        <div class="bg-light">
+          <v-list-item link>
+            <v-list-item-content>
+              <v-list-item-title>ชื่อไฟล์</v-list-item-title>
+            </v-list-item-content>
+
+            <v-list-item-content>
+              <v-list-item-title>{{ filename.name }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </div>
+      </v-list-group>
+    </v-list>
+
     <v-card
         flat
         v-if="transaction"
