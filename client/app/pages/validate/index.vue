@@ -125,7 +125,7 @@ export default {
       hideProgress: false,
       progress: 0,
       handleEvent: false,
-      baseURL: this.$config.baseURL,
+      baseURL: this.$config.baseURLValidate,
       btnSubmit: false,
       siteKey: this.$config.siteKey,
       secretKey: this.$config.secretKey,
@@ -195,7 +195,7 @@ export default {
             } else {
               this.$router.push(
                   {
-                    name: '/validate/result',
+                    name: 'validate-result',
                     params: {
                       transaction: this.transaction,
                       signature_service: this.file
