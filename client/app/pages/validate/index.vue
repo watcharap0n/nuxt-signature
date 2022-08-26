@@ -195,7 +195,7 @@ export default {
             } else {
               this.$router.push(
                   {
-                    name: '/validate',
+                    name: '/validate/result',
                     params: {
                       transaction: this.transaction,
                       signature_service: this.file
