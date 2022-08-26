@@ -12,8 +12,8 @@
       <v-spacer></v-spacer>
 
       <v-btn text>หน้าหลัก</v-btn>&nbsp;
-      <v-btn text>การให้บริการ</v-btn>&nbsp;
-      <v-btn text>ระบบตรวจสอบ</v-btn>
+      <v-btn text @click.prevent="$router.push('/validate')">ระบบตรวจสอบ</v-btn>
+      <v-btn text @click.prevent="$router.push('/timestamp')">ระบบประทับรับรองเวลา</v-btn>&nbsp;
 
     </v-app-bar>
 
