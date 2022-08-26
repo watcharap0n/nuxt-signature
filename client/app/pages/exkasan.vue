@@ -417,6 +417,11 @@ export default {
     }
   },
 
+  created() {
+    if (!this.filename)
+      this.$router.push('/')
+  },
+
   computed: {
     changeColorVal() {
       let text = '';
