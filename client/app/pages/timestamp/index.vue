@@ -155,7 +155,7 @@ export default {
 
   methods: {
     async initialized() {
-      await liff.init({liffId: '1657396403-naMjBRBp'},
+      await liff.init({liffId: '1657396403-0YxPaKad'},
           () => {
             if (liff.isLoggedIn()) {
               liff.getProfile()
