@@ -13,7 +13,7 @@
 
       <v-btn text>หน้าหลัก</v-btn>&nbsp;
       <v-btn text @click.prevent="$router.push('/validate')">ระบบตรวจสอบ</v-btn>
-      <v-btn text @click.prevent="$router.push('/timestamp')">ระบบประทับรับรองเวลา</v-btn>&nbsp;
+      <v-btn text>ระบบประทับรับรองเวลา</v-btn>&nbsp;
 
     </v-app-bar>
 
