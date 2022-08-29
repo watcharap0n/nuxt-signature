@@ -207,8 +207,8 @@ export default {
           .catch((err) => {
             this.$swal.fire({
               icon: 'warning',
-              title: 'Oops...',
-              text: 'Something went wrong please try again.'
+              title: 'Internal server error',
+              text: `Something went wrong (${err.response.status}) please try again.`
             })
             console.error(err);
             this.$recaptcha.reset();
@@ -261,8 +261,8 @@ export default {
       } catch (error) {
         this.$swal.fire({
           icon: 'warning',
-          title: 'Oops...',
-          text: 'Something went wrong please try again.',
+          title: 'Internal server error',
+          text: `Something went wrong (${error.response.status}) please try again.`
         })
         console.log('Login error:', error);
       }
