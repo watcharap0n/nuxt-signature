@@ -439,7 +439,7 @@ export default {
             ts += 1
             this.tsSign = ts;
           }
-          if (val.tsSignerCertificateDn) {
+          if (!val.dsSignerCertificateDn) {
             if (val.tsSignerCertificateDn.subjectDn.commonName === 'Advancert by ThaiAI') {
               this.countAvancert += 1
               if (this.countAvancert === 1)
