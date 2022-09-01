@@ -234,16 +234,74 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-dialog
+        persistent
+        width="400px"
+        v-model="dialogLogin"
+    >
+      <v-card>
+        <v-card-title style="align-content: center; justify-content: center">
+          เข้าสู่ระบบ
+        </v-card-title>
 
+        <v-card-text>
+          <v-btn block
+                 color="#5AC463"
+                 dark
+                 style="margin-bottom: 10px;"
+                 @click="initializedLINE"
+          >
+            <i class="fa-brands fa-line"></i>
+            &nbsp;เข้าสู่ระบบด้วย LINE
+          </v-btn>
+
+          <!--          <div id="googleButton" style="margin-bottom: 10px"></div>-->
+          <v-btn block
+                 color="white"
+                 style="margin-bottom: 10px;"
+                 @click="initializedGoogle"
+          >
+            <i class="fa-brands fa-google"></i>
+            &nbsp;เข้าสู่ระบบด้วย Google
+          </v-btn>
+
+          <!--          <div class="fb-login-button" data-width="" data-size="medium" data-button-type="login_with"-->
+          <!--               data-layout="default" data-auto-logout-link="false" data-use-continue-as="false"></div>-->
+          <v-btn block
+                 color="#42538A"
+                 dark
+                 style="margin-bottom: 10px;"
+                 @click="initializedFB"
+          >
+            <i class="fab fa-facebook-f"></i>
+            &nbsp;เข้าสู่ระบบด้วย FACEBOOK
+          </v-btn>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+
+    <v-btn small
+           @click="logout"
+           text
+           color="error"
+           :hidden="!isLogout"
+    >ออกจากระบบ
+    </v-btn>
+
+    <Overlay :overlay="overlay" color="lime"></Overlay>
   </v-container>
 </template>
 
 <script>
 import liff from '@line/liff';
+import Overlay from "@/components/Overlay";
 
 export default {
   data() {
     return {
+      overlay: false,
+      isLogout: false,
+      dialogLogin: false,
       dialog: false,
       hideProgress: false,
       progress: 0,
@@ -252,6 +310,7 @@ export default {
       btnSubmit: false,
       siteKey: this.$config.siteKey,
       secretKey: this.$config.secretKey,
+      liffIdTs: this.$config.liffIdTs,
       spin: false,
       dragover: false,
       pdf_enc: null,
@@ -266,31 +325,54 @@ export default {
       ],
     }
   },
+  components: {
+    Overlay
+  },
 
-  async mounted() {
-    try {
-      if (this.$device.android || this.$device.ios) {
-        await this.initialized();
-      }
-      await this.$recaptcha.init();
-    } catch (e) {
-      console.error(e);
+  async created() {
+    this.overlay = true
+    console.log(this.$auth.loggedIn)
+    console.log(this.$auth.user)
+    await liff.init({liffId: this.liffIdTs},
+        () => {
+          if (liff.isLoggedIn()) {
+            this.dialogLogin = false
+          }
+          if (!liff.isLoggedIn() && !this.$auth.loggedIn) {
+            this.dialogLogin = true
+          }
+        })
+    if (this.$auth.loggedIn) {
+      this.dialogLogin = false;
     }
+    if (!liff.isLoggedIn() && !this.$auth.loggedIn) {
+      this.dialogLogin = true
+    }
+    this.overlay = false
   },
 
   methods: {
-    async initialized() {
-      await liff.init({liffId: '1657396403-0YxPaKad'},
+    async initializedLINE() {
+      await liff.init({liffId: this.liffIdTs},
           () => {
             if (liff.isLoggedIn()) {
               liff.getProfile()
                   .then((profile) => {
-                    console.log(profile)
+                    console.log(profile);
+                    this.dialogLogin = false;
                   })
             } else {
               liff.login();
             }
           });
+    },
+
+    async initializedGoogle() {
+      await this.$auth.loginWith('google', {params: {prompt: "select_account"}});
+    },
+
+    async initializedFB() {
+      await this.$auth.loginWith('facebook');
     },
 
     async verifyCaptcha() {
@@ -310,6 +392,11 @@ export default {
         })
         console.log('Login error:', error);
       }
+    },
+
+    async logout() {
+      await this.$auth.logout()
+      location.reload()
     },
 
     async timestampExkasan() {
@@ -420,6 +507,14 @@ export default {
 #recaptcha {
   margin-left: 50px;
   margin-top: -30px;
+}
+
+.fa-google {
+  background: conic-gradient(from -45deg, #ea4335 110deg, #4285f4 90deg 180deg, #34a853 180deg 270deg, #fbbc05 270deg) 73% 55%/150% 150% no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
 }
 
 #text-decoration {
