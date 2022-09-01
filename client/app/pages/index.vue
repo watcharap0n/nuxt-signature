@@ -5,7 +5,7 @@
 <script>
 export default {
   beforeCreate() {
-    this.$router.push('/validate')
+    this.$router.push('/timestamp')
   }
 }
 </script>
