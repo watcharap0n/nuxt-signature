@@ -38,7 +38,8 @@ module.exports = {
         apiTimeStampExkasan: process.env.API_TIMESTAMP_EXKASAN,
         apiUploadPdf: process.env.API_UPLOAD_PDF,
         apiHandelFile: process.env.API_HANDLE_FILE,
-        liffId: process.env.LIFFID
+        liffId: process.env.LIFFID,
+        liffIdTs: process.env.LIFFID_TIMESTAMP
     },
 
     server: {
@@ -53,10 +54,13 @@ module.exports = {
         meta: [
             {charset: 'utf-8'},
             {name: 'viewport', content: 'width=device-width, initial-scale=1'},
-            {hid: 'description', name: 'description', content: 'Meta description'}
+            {hid: 'description', name: 'description', content: 'Meta description'},
         ],
 
         script: [
+            {
+                src: 'https://accounts.google.com/gsi/client'
+            },
             {
                 src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'
             },
@@ -76,10 +80,21 @@ module.exports = {
             },
             {
                 src: 'https://cdn.tailwindcss.com'
+            },
+            {
+                async: true,
+                defer: true,
+                crossorigin: 'anonymous',
+                src: 'https://connect.facebook.net/th_TH/sdk.js#xfbml=1&version=v14.0&appId=1098152014395903&autoLogAppEvents=1'
             }
         ],
 
         link: [
+            {
+                rel: 'stylesheet',
+                href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css',
+                crossorigin: 'anonymous'
+            },
             {
                 rel: 'icon',
                 type: 'image/png',
@@ -124,6 +139,7 @@ module.exports = {
 
     modules: [
         '@nuxtjs/axios',
+        '@nuxtjs/auth-next',
         'bootstrap-vue/nuxt',
         'vue-sweetalert2/nuxt',
         [
@@ -136,6 +152,29 @@ module.exports = {
         ],
         '@nuxtjs/gtm'
     ],
+
+    auth: {
+        strategies: {
+            facebook: {
+                endpoints: {
+                    userInfo: 'https://graph.facebook.com/v6.0/me?fields=id,name,picture,email{url}'
+                },
+                clientId: process.env.CLIENT_ID_FACEBOOK,
+                scope: ['public_profile', 'email']
+            },
+            google: {
+                clientId: process.env.CLIENT_ID_GOOGLE,
+                scope: ['profile', 'email'],
+                codeChallengeMethod: '',
+                responseType: 'token id_token',
+                redirectUri: process.env.REDIRECT_URI
+            },
+        },
+        redirect: {
+            callback: '/timestamp',
+            logout: '/timestamp',
+        }
+    },
 
     gtm: {
         id: 'GTM-71TY1V8321'
