@@ -28,10 +28,18 @@
 
 <script>
 import Snackbar from "@/components/Snackbar";
+import liff from '@line/liff';
 
 export default {
   components: {
     Snackbar
+  },
+  methods: {
+    async logout() {
+      await this.$auth.logout();
+      await liff.logout();
+      location.reload();
+    },
   }
 }
 </script>
