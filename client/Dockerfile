@@ -1,6 +1,9 @@
 FROM node:12.16.3-alpine3.9
 # FROM node:16.17.0
 ARG SITEKEY
+ARG CLIENT_ID_GOOGLE
+ARG CLIENT_ID_FACEBOOK
+ARG REDIRECT_URI
 # ENV SITEKEY ${SITEKEY}
 # ENV SITEKEY 6LddfEYhAAAAADasSiipmOoRrB3OSu3udtK4jFs1
 RUN mkdir -p /var/www/dockerize-nuxt/e-document-nuxt
