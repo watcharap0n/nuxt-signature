@@ -309,7 +309,7 @@ export default {
                   this.$parent.$emit('authUser', profile);
                   this.$parent.$emit('issue', 'line')
                   this.profileLINE = profile
-                  this.profileLINE.email = liff.getDecodedIDToken() ? liff.getDecodedIDToken() : null
+                  this.profileLINE.email = liff.getDecodedIDToken().email ? liff.getDecodedIDToken().email : null
                   this.channel = 'line'
                 })
             this.$nuxt.$emit('session', false)
