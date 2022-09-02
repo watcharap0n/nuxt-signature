@@ -184,9 +184,9 @@
 
           <v-btn block
                  color="#42538A"
-                 dark
                  style="margin-bottom: 10px;"
                  @click="initializedFB"
+                 disabled
           >
             <i class="fab fa-facebook-f"></i>
             &nbsp;เข้าสู่ระบบด้วย FACEBOOK
