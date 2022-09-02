@@ -252,16 +252,27 @@ export default {
     await liff.init({liffId: this.liffIdTs},
         () => {
           if (liff.isLoggedIn()) {
+            liff.getProfile()
+                .then((profile) => {
+                  this.$parent.$emit('authUser', profile);
+                  this.$parent.$emit('issue', 'line')
+                })
+            this.$nuxt.$emit('session', false)
             this.dialogLogin = false
           }
           if (!liff.isLoggedIn() && !this.$auth.loggedIn) {
+            this.$nuxt.$emit('session', true)
             this.dialogLogin = true
           }
         })
     if (this.$auth.loggedIn) {
+      await this.$parent.$emit('authUser', this.$auth.user);
+      await this.$parent.$emit('issue', this.$auth.strategy.name)
+      this.$nuxt.$emit('session', false)
       this.dialogLogin = false;
     }
     if (!liff.isLoggedIn() && !this.$auth.loggedIn) {
+      this.$nuxt.$emit('session', true)
       this.dialogLogin = true
     }
     this.overlay = false
