@@ -122,90 +122,8 @@
           falt
       >
         <v-card-title>Timestamp</v-card-title>
-        <v-card-text v-if="transaction">
-
-          <div v-for="(v, k) in transaction.signatures" :key="k">
-            <v-list>
-              <v-list-group
-                  style="background: #D0DA52; stroke: black; border-radius: 10px"
-                  v-if="!v.dsSignerCertificateDn"
-                  :value="true"
-                  no-action
-                  prepend-icon="mdi-timer-lock-open-outline"
-                  color="black"
-              >
-                <template v-slot:activator>
-                  <v-list-item-content>
-                    <v-list-item-title>Rev.{{ k + 1 }} Timestamp</v-list-item-title>
-                  </v-list-item-content>
-                </template>
-
-                <div class="bg-light">
-                  <v-list-item link>
-                    <v-list-item-content>
-                      <v-list-item-title>ผลการตรวจสอบ</v-list-item-title>
-                    </v-list-item-content>
-
-                    <v-list-item-content>
-                      <v-list-item-icon>
-                        <v-icon left color="success" v-text="v.tsCertPathTrusted ? 'mdi-check-bold': ''"></v-icon>
-                        <div v-text="v.tsCertPathTrusted ? 'Trusted': 'ไม่พบการประทับรับรองเวลาในระบบ Exkasan'"></div>
-                      </v-list-item-icon>
-                    </v-list-item-content>
-                  </v-list-item>
-
-                  <v-list-item link>
-                    <v-list-item-content>
-                      <v-list-item-title>ชื่อองค์กรประทับรับรองเวลา</v-list-item-title>
-                    </v-list-item-content>
-
-                    <v-list-item-content>
-                      <v-list-item-title>
-                        {{ v.tsSignerCertificateDn.subjectDn.commonName }}
-                      </v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-
-                  <v-list-item link>
-                    <v-list-item-content>
-                      <v-list-item-title>ชื่อผู้ใหบริการใบรับรอง</v-list-item-title>
-                    </v-list-item-content>
-
-                    <v-list-item-content>
-                      <v-list-item-title>
-                        {{ v.tsSignerCertificateDn.issuerDn.commonName }}
-                      </v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-
-                  <v-list-item link>
-                    <v-list-item-content>
-                      <v-list-item-title>วันออกใบรับรอง</v-list-item-title>
-                    </v-list-item-content>
-
-                    <v-list-item-content>
-                      <v-list-item-title>
-                        {{ new Date(v.tsSignerCertificateDn.start) }}
-                      </v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-
-                  <v-list-item link>
-                    <v-list-item-content>
-                      <v-list-item-title>วันหมดอายุใบรับรองอิเล็กทรอนิกส์</v-list-item-title>
-                    </v-list-item-content>
-
-                    <v-list-item-content>
-                      <v-list-item-title>
-                        {{ new Date(v.tsSignerCertificateDn.end) }}
-                      </v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                </div>
-              </v-list-group>
-            </v-list>
-          </div>
-
+        <v-card-text>
+          <v-subheader>ระบบได้รับการประทับระบรองเวลา Advancert ลงบนเอกสารเรียบร้อยแล้วกรุณาดาวโหลด</v-subheader>
         </v-card-text>
 
         <v-card-actions>
@@ -255,7 +173,6 @@
             &nbsp;เข้าสู่ระบบด้วย LINE
           </v-btn>
 
-          <!--          <div id="googleButton" style="margin-bottom: 10px"></div>-->
           <v-btn block
                  color="white"
                  style="margin-bottom: 10px;"
@@ -265,8 +182,6 @@
             &nbsp;เข้าสู่ระบบด้วย Google
           </v-btn>
 
-          <!--          <div class="fb-login-button" data-width="" data-size="medium" data-button-type="login_with"-->
-          <!--               data-layout="default" data-auto-logout-link="false" data-use-continue-as="false"></div>-->
           <v-btn block
                  color="#42538A"
                  dark
@@ -333,6 +248,7 @@ export default {
     this.overlay = true
     console.log(this.$auth.loggedIn)
     console.log(this.$auth.user)
+    console.log(this.$auth.strategy.name)
     await liff.init({liffId: this.liffIdTs},
         () => {
           if (liff.isLoggedIn()) {
@@ -408,6 +324,10 @@ export default {
           this.hideProgress = true
         }.bind(this),
         responseType: 'blob',
+        auth: {
+          username: this.$config.basicAuthUsername,
+          password: this.$config.basicAuthPassword
+        }
       }
       let formData = new FormData();
       formData.append('file', this.file);
@@ -417,35 +337,6 @@ export default {
             let ext = this.file.name.split('.');
             this.blob = res.data
             this.filenamePDF = `${ext[0]}_timestamped.pdf`;
-            this.verifyExkasan(this.blob, `${ext[0]}_timestamped.pdf`)
-          })
-          .catch((err) => {
-            this.$swal.fire({
-              icon: 'warning',
-              title: 'Internal server error',
-              text: `Something went wrong (${err.response.status}) please try again.`
-            })
-            console.error(err);
-            this.$recaptcha.reset();
-            this.btnSubmit = false;
-            this.spin = false;
-          })
-    },
-
-    async verifyExkasan(blob, filename) {
-      const path = `${this.$config.baseURLValidate}${this.$config.apiVerifyExkasan}`
-      const config = {
-        onUploadProgress: function (progressEvent) {
-          this.progress = parseInt(Math.round((progressEvent.loaded * 100) / progressEvent.total))
-          this.hideProgress = true
-        }.bind(this)
-      }
-      let formData = new FormData();
-      formData.append('file', blob, filename);
-      await this.$axios.post(path, formData, config)
-          .then((res) => {
-            console.log(res.data)
-            this.transaction = res.data;
             this.dialog = true
           })
           .catch((err) => {
@@ -454,7 +345,10 @@ export default {
               title: 'Internal server error',
               text: `Something went wrong (${err.response.status}) please try again.`
             })
+            console.error(err);
           })
+      this.$recaptcha.reset();
+      this.btnSubmit = false;
       this.spin = false;
     },
 
@@ -465,6 +359,8 @@ export default {
       link.download = this.filenamePDF
       document.body.appendChild(link);
       link.click();
+      this.file = null
+      this.dialog = false
     },
 
     onDrop(e) {

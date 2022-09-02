@@ -39,7 +39,9 @@ module.exports = {
         apiUploadPdf: process.env.API_UPLOAD_PDF,
         apiHandelFile: process.env.API_HANDLE_FILE,
         liffId: process.env.LIFFID,
-        liffIdTs: process.env.LIFFID_TIMESTAMP
+        liffIdTs: process.env.LIFFID_TIMESTAMP,
+        basicAuthUsername: process.env.BASIC_AUTH_USERNAME,
+        basicAuthPassword: process.env.BASIC_AUTH_PASSWORD
     },
 
     server: {
