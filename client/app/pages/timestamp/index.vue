@@ -284,8 +284,8 @@ export default {
         this.initQuotaProfile()
       } else {
         this.authUser.issue = 'line'
-        this.authUser.display_name = this.profileLINE.display_name
-        this.authUser.email = this.profileLINE.email ? this.profileLINE.email : null
+        this.authUser.display_name = this.profileLINE.displayName
+        this.authUser.email = this.profileLINE.email
         this.authUser.user_id = this.profileLINE.userId
         this.authUser.picture_url = this.profileLINE.pictureUrl
         this.initQuotaProfile()
@@ -309,6 +309,7 @@ export default {
                   this.$parent.$emit('authUser', profile);
                   this.$parent.$emit('issue', 'line')
                   this.profileLINE = profile
+                  this.profileLINE.email = liff.getDecodedIDToken() ? liff.getDecodedIDToken() : null
                   this.channel = 'line'
                 })
             this.$nuxt.$emit('session', false)
