@@ -65,6 +65,11 @@
           </v-card-text>
         </v-card>
         <br>
+        <div class="text-center" v-if="role === 'common'">
+          <v-chip color="red" dark>จำนวนโควต้าที่เหลือ: {{ quota }}</v-chip>
+        </div>
+
+        <br>
         <br>
         <div style="margin-left: -30px">
           <recaptcha
@@ -185,7 +190,6 @@
           <v-btn block
                  color="#42538A"
                  style="margin-bottom: 10px;"
-                 @click="initializedFB"
                  disabled
           >
             <i class="fab fa-facebook-f"></i>
@@ -195,14 +199,30 @@
       </v-card>
     </v-dialog>
 
-    <v-btn small
-           @click="logout"
-           text
-           color="error"
-           :hidden="!isLogout"
-    >ออกจากระบบ
-    </v-btn>
-
+    <v-dialog
+        v-model="disabled"
+        persistent
+        width="500px"
+    >
+      <v-card>
+        <v-card-title>
+          ระบบประทับรับรองเวลาอิเล็กทรอนิกส์ Advancert
+        </v-card-title>
+        <v-card-text>
+          การทดสอบประทับรับรองเวลาอิเล็กทรอนิกส์ Advancert ครบจำนวนแล้ว หากต้องการใช้งานประทับรับรองอิเล็กทรอนิกส์ต่อ
+          <br> กรุณาลงทะเบียนลิงค์ปุ่มด้านล่าง
+        </v-card-text>
+        <v-card-actions>
+          <v-btn block
+                 color="lime"
+                 dark
+                 href="https://forms.office.com/r/eEPt2MZczi"
+          >
+            ลงทะเบียน
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <Overlay :overlay="overlay" color="lime"></Overlay>
   </v-container>
 </template>
@@ -214,14 +234,18 @@ import Overlay from "@/components/Overlay";
 export default {
   data() {
     return {
+      disabled: false,
+      role: '',
+      quota: 1,
       overlay: false,
-      isLogout: false,
       dialogLogin: false,
       dialog: false,
       hideProgress: false,
       progress: 0,
       handleEvent: false,
       baseURL: this.$config.baseURLTimestamp,
+      basicAuthUsername: this.$config.basicAuthUsername,
+      basicAuthPassword: this.$config.basicAuthPassword,
       btnSubmit: false,
       siteKey: this.$config.siteKey,
       secretKey: this.$config.secretKey,
@@ -234,14 +258,42 @@ export default {
       transaction: null,
       blob: '',
       filenamePDF: '',
+      channel: '',
+      authUser: {},
+      profileLINE: {},
       rules: [
         value => !!value || 'required.',
         value => !value || value.size < 100000000 || 'file size should be less than 10 MB!'
       ],
+
     }
   },
   components: {
     Overlay
+  },
+
+  watch: {
+    channel(val) {
+      if (val === 'google') {
+        let auth = this.$auth.user
+        this.authUser.issue = 'google'
+        this.authUser.display_name = auth.name
+        this.authUser.email = auth.email
+        this.authUser.picture_url = auth.picture
+        this.authUser.user_id = auth.sub
+        this.initQuotaProfile()
+      } else {
+        this.authUser.issue = 'line'
+        this.authUser.display_name = this.profileLINE.display_name
+        this.authUser.email = this.profileLINE.email ? this.profileLINE.email : null
+        this.authUser.user_id = this.profileLINE.userId
+        this.authUser.picture_url = this.profileLINE.pictureUrl
+        this.initQuotaProfile()
+      }
+    },
+    quota(val) {
+      this.disabled = val <= 0;
+    }
   },
 
   async created() {
@@ -256,6 +308,8 @@ export default {
                 .then((profile) => {
                   this.$parent.$emit('authUser', profile);
                   this.$parent.$emit('issue', 'line')
+                  this.profileLINE = profile
+                  this.channel = 'line'
                 })
             this.$nuxt.$emit('session', false)
             this.dialogLogin = false
@@ -270,6 +324,7 @@ export default {
       await this.$parent.$emit('issue', this.$auth.strategy.name)
       this.$nuxt.$emit('session', false)
       this.dialogLogin = false;
+      this.channel = this.$auth.strategy.name
     }
     if (!liff.isLoggedIn() && !this.$auth.loggedIn) {
       this.$nuxt.$emit('session', true)
@@ -298,9 +353,68 @@ export default {
       await this.$auth.loginWith('google', {params: {prompt: "select_account"}});
     },
 
-    async initializedFB() {
-      await this.$auth.loginWith('facebook');
+    async quotaProfile() {
+      const path = `/timestamp/profile/read/${this.authUser.user_id}?issue=${this.authUser.issue}`;
+      const config = {
+        auth: {
+          username: this.basicAuthUsername,
+          password: this.basicAuthPassword
+        }
+      }
+      await this.$axios.get(path, config)
+          .then((res) => {
+            this.quota = res.data.quota;
+            this.role = res.data.role
+            if (res.data.quota === 0) {
+              this.$notifier.showMessage({
+                color: 'error',
+                content: `เกินจำนวนที่กำหนดให้ใช้งาน.`
+              })
+            }
+          })
+          .catch((err) => {
+            if (err.response.status === 403) {
+              this.quota = 0;
+              this.$notifier.showMessage({
+                color: 'error',
+                content: `เกินจำนวนที่กำหนดให้ใช้งาน สามารถสมัครใช้งานได้ที่.`
+              })
+            } else {
+              this.$notifier.showMessage({
+                color: 'error',
+                content: `มีบางอย่างผิดพลาด โปรดลองใหม่อีกครั้ง`
+              })
+            }
+            console.error(err)
+          })
     },
+
+    async initQuotaProfile() {
+      const path = '/timestamp/profile/initialize';
+      const config = {
+        auth: {
+          username: this.basicAuthUsername,
+          password: this.basicAuthPassword
+        }
+      }
+      await this.$axios.post(path, this.authUser, config)
+          .then((res) => {
+            this.quota = res.data.detail.quota
+            this.role = res.data.detail.role
+            this.$notifier.showMessage({
+              color: 'success',
+              content: `เข้าสู่ระบบสำเร็จด้วย ${this.channel}`
+            })
+          })
+          .catch((err) => {
+            this.$notifier.showMessage({
+              color: 'red',
+              content: `มีบางอย่างผิดพลาด ${err.response.status}`
+            })
+            console.error(err)
+          })
+    },
+
 
     async verifyCaptcha() {
       try {
@@ -321,11 +435,6 @@ export default {
       }
     },
 
-    async logout() {
-      await this.$auth.logout()
-      location.reload()
-    },
-
     async timestampExkasan() {
       this.spin = true;
       const path = `${this.baseURL}${this.$config.apiTimeStampExkasan}`
@@ -336,8 +445,8 @@ export default {
         }.bind(this),
         responseType: 'blob',
         auth: {
-          username: this.$config.basicAuthUsername,
-          password: this.$config.basicAuthPassword
+          username: this.basicAuthUsername,
+          password: this.basicAuthPassword
         }
       }
       let formData = new FormData();
@@ -345,6 +454,7 @@ export default {
 
       await this.$axios.post(path, formData, config)
           .then((res) => {
+            this.quotaProfile();
             let ext = this.file.name.split('.');
             this.blob = res.data
             this.filenamePDF = `${ext[0]}_timestamped.pdf`;

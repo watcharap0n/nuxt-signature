@@ -186,7 +186,7 @@ module.exports = {
     components: true,
 
     axios: {
-        proxy: true
+        proxy: true,
     },
     proxy: {
         '/captcha-api/': {
@@ -194,6 +194,8 @@ module.exports = {
             pathRewrite: {
                 '^/captcha-api': ""
             }
-        }
+        },
+        '/timestamp/': 'https://stamp-stg.exkasan.com'
     }
+
 }

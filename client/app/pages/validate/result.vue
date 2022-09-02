@@ -445,6 +445,11 @@ export default {
               if (this.countAvancert === 1)
                 text += 'text-lime-700'
             }
+            if (val.tsSignerCertificateDn.subjectDn.commonName === 'YouSign by ThaiAI') {
+              this.countYourSign += 1
+              if (this.countYourSign === 1)
+                text += 'text-lime-700'
+            }
           }
         })
       }
