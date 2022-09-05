@@ -187,7 +187,6 @@ module.exports = {
 
     axios: {
         proxy: true,
-        baseURL: process.env.BASE_URL
     },
     proxy: {
         '/captcha-api/': {
@@ -196,8 +195,8 @@ module.exports = {
                 '^/captcha-api': ""
             }
         },
-        '/timestamp/': process.env.BASE_URL,
-        '/signature/': process.env.BASE_URL
+        '/timestamp/': "https://stamp-stg.exkasan.com",
+        '/signature/': "https://stamp-stg.exkasan.com"
 
     }
 
