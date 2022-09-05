@@ -187,6 +187,7 @@ module.exports = {
 
     axios: {
         proxy: true,
+        baseURL: process.env.BASE_URL
     },
     proxy: {
         '/captcha-api/': {
