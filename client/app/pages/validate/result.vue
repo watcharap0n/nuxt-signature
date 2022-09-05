@@ -434,6 +434,11 @@ export default {
           if (val.dsSignerCertificateDn) {
             ds += 1
             this.dsSign = ds;
+            if (val.dsSignerCertificateDn.issuerDn.commonName === 'Yoursign by ThaiAI') {
+              this.countYourSign += 1
+              if (this.countYourSign === 1)
+                text += 'text-lime-700'
+            }
           }
           if (!val.dsSignerCertificateDn) {
             ts += 1
@@ -443,11 +448,6 @@ export default {
             if (val.tsSignerCertificateDn.subjectDn.commonName === 'Advancert by ThaiAI') {
               this.countAvancert += 1
               if (this.countAvancert === 1)
-                text += 'text-lime-700'
-            }
-            if (val.tsSignerCertificateDn.subjectDn.commonName === 'YouSign by ThaiAI') {
-              this.countYourSign += 1
-              if (this.countYourSign === 1)
                 text += 'text-lime-700'
             }
           }
