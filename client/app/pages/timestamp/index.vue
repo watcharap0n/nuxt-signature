@@ -142,17 +142,17 @@
             <v-icon left>
               mdi-download-circle-outline
             </v-icon>
-            Download
+            ดาวน์โหลด
           </v-btn>
           <v-btn color="error"
                  text
-                 @click="dialog = false"
+                 @click="close"
                  rounded
           >
             <v-icon left>
               mdi-close-circle-outline
             </v-icon>
-            Close
+            ปิด
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -292,7 +292,16 @@ export default {
       }
     },
     quota(val) {
-      this.disabled = val <= 0;
+      if (this.dialog === false) {
+        this.disabled = val <= 0;
+      }
+    },
+    dialog(val) {
+      if (val === false) {
+        if (this.quota === 0) {
+          this.disabled = true
+        }
+      }
     }
   },
 
@@ -481,6 +490,11 @@ export default {
       link.download = this.filenamePDF
       document.body.appendChild(link);
       link.click();
+      this.file = null
+      this.dialog = false
+    },
+
+    close() {
       this.file = null
       this.dialog = false
     },
