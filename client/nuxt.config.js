@@ -195,8 +195,8 @@ module.exports = {
                 '^/captcha-api': ""
             }
         },
-        '/timestamp/': 'https://stamp-stg.exkasan.com',
-        '/signature/': 'https://stamp-stg.exkasan.com'
+        '/timestamp/': process.env.BASE_URL,
+        '/signature/': process.env.BASE_URL
 
     }
 
