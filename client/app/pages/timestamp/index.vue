@@ -243,7 +243,6 @@ export default {
       hideProgress: false,
       progress: 0,
       handleEvent: false,
-      baseURL: this.$config.baseURLTimestamp,
       basicAuthUsername: this.$config.basicAuthUsername,
       basicAuthPassword: this.$config.basicAuthPassword,
       btnSubmit: false,
@@ -447,7 +446,7 @@ export default {
 
     async timestampExkasan() {
       this.spin = true;
-      const path = `${this.baseURL}${this.$config.apiTimeStampExkasan}`
+      const path = '/timestamp';
       const config = {
         onUploadProgress: function (progressEvent) {
           this.progress = parseInt(Math.round((progressEvent.loaded * 100) / progressEvent.total))
