@@ -125,7 +125,6 @@ export default {
       hideProgress: false,
       progress: 0,
       handleEvent: false,
-      baseURL: this.$config.baseURLValidate,
       btnSubmit: false,
       siteKey: this.$config.siteKey,
       secretKey: this.$config.secretKey,
@@ -135,6 +134,7 @@ export default {
       pdf_enc: null,
       pdf_pwd: '',
       file: null,
+      authUser: {},
       rules: [
         value => !!value || 'required.',
         value => !value || value.size < 100000000 || 'file size should be less than 10 MB!'
@@ -155,12 +155,17 @@ export default {
 
   methods: {
     async initialized() {
-      await liff.init({liffId: '1657396403-naMjBRBp'},
+      await liff.init({liffId: this.$config.liffId},
           () => {
             if (liff.isLoggedIn()) {
               liff.getProfile()
                   .then((profile) => {
-                    console.log(profile)
+                    this.authUser.issue = 'line'
+                    this.authUser.display_name = profile.displayName
+                    this.authUser = liff.getDecodedIDToken().email ? liff.getDecodedIDToken().email : null
+                    this.authUser.user_id = profile.userId
+                    this.authUser.picture_url = profile.pictureUrl
+                    this.initQuotaProfile()
                   })
             } else {
               liff.login();
@@ -168,9 +173,26 @@ export default {
           });
     },
 
+    async initQuotaProfile() {
+      const path = '/timestamp/profile/initialize';
+      const config = {
+        auth: {
+          username: this.basicAuthUsername,
+          password: this.basicAuthPassword
+        }
+      }
+      await this.$axios.post(path, this.authUser, config)
+          .then((res) => {
+            console.log(res.data)
+          })
+          .catch((err) => {
+            console.error(err)
+          })
+    },
+
     async validate_exkasan() {
       this.spin = true;
-      const path = `${this.baseURL}${this.$config.apiVerifyExkasan}`
+      const path = '/signature/validate/exkasan'
       const config = {
         onUploadProgress: function (progressEvent) {
           this.progress = parseInt(Math.round((progressEvent.loaded * 100) / progressEvent.total))
