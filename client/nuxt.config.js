@@ -189,8 +189,8 @@ module.exports = {
                 '^/captcha-api': ""
             }
         },
-        '/timestamp/': process.env.BASE_URL_BACKEND,
-        '/signature/': process.env.BASE_URL_BACKEND
+        '/timestamp/': 'https://stamp-stg.exkasan.com',
+        '/signature/': 'https://stamp-stg.exkasan.com'
     }
 
 }
