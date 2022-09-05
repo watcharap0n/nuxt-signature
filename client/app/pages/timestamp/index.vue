@@ -442,7 +442,7 @@ export default {
 
     async timestampExkasan() {
       this.spin = true;
-      const path = '/timestamp';
+      const path = 'https://stamp-stg.exkasan.com/timestamp';
       const config = {
         onUploadProgress: function (progressEvent) {
           this.progress = parseInt(Math.round((progressEvent.loaded * 100) / progressEvent.total))
