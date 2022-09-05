@@ -29,7 +29,7 @@
             </v-list-item-content>
 
             <v-list-item-content>
-              <v-list-item-title>{{ filename.name }}</v-list-item-title>
+              <v-list-item-title> {{ filename.name }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
 
@@ -92,7 +92,7 @@
             </v-list-item-content>
 
             <v-list-item-content>
-              <v-list-item-title></v-list-item-title>
+              <v-list-item-title v-if="countYourSign > 0">{{ countYourSign }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
 
@@ -135,11 +135,21 @@
                   <v-list-item-title>ผลการตรวจสอบ</v-list-item-title>
                 </v-list-item-content>
 
-                <v-list-item-content>
+                <v-list-item-content v-if="v.dsCertPathTrusted">
                   <v-list-item-icon>
-                    <v-icon left color="success" v-text="v.dsCertPathTrusted ? 'mdi-check-bold': ''"></v-icon>
-                    <div v-text="v.dsCertPathTrusted ? 'Trusted': 'ไม่พบลายมือชื่อดิจิทัลในระบบ Exkasan'"></div>
+                    <v-icon left color="success">mdi-checkbox-marked-circle</v-icon>
+                    <div class="font-bold">Trusted</div>
                   </v-list-item-icon>
+                </v-list-item-content>
+
+                <v-list-item-content v-else>
+                  <v-list-item-icon
+                      v-if="v.dsSignerCertificateDn.issuerDn.commonName === 'Yoursign by ThaiAI'">
+                    <v-icon left color="success">mdi-checkbox-marked-circle</v-icon>
+                    <div class="text-lime-700 font-bold">Trusted ออกจากระบบ Exkasan</div>
+                  </v-list-item-icon>
+
+                  <v-list-item-title v-else class="font-bold">ไม่พบลายมือชื่อดิจิทัลในระบบ Exkasan</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
 
@@ -148,8 +158,14 @@
                   <v-list-item-title>ผู้ลงลายมือชื่อดิจิทัล</v-list-item-title>
                 </v-list-item-content>
 
-                <v-list-item-content :class="[changeColorVal]">
-                  {{ v.dsSignerCertificateDn.issuerDn.commonName }}
+                <v-list-item-content>
+                  <div v-if="v.dsSignerCertificateDn.issuerDn.commonName === 'Yoursign by ThaiAI'"
+                       class="text-lime-700">
+                    {{ v.dsSignerCertificateDn.issuerDn.commonName }}
+                  </div>
+                  <div v-else>
+                    {{ v.dsSignerCertificateDn.issuerDn.commonName }}
+                  </div>
                 </v-list-item-content>
               </v-list-item>
 
@@ -158,8 +174,14 @@
                   <v-list-item-title>ผู้ออกใบรับรองอิเล็กทรอนิกส์</v-list-item-title>
                 </v-list-item-content>
 
-                <v-list-item-content :class="[changeColorVal]">
-                  {{ v.dsSignerCertificateDn.issuerDn.commonName }}
+                <v-list-item-content>
+                  <div v-if="v.dsSignerCertificateDn.issuerDn.commonName === 'Yoursign by ThaiAI'"
+                       class="text-lime-700">
+                    {{ v.dsSignerCertificateDn.issuerDn.commonName }}
+                  </div>
+                  <div v-else>
+                    {{ v.dsSignerCertificateDn.issuerDn.commonName }}
+                  </div>
                 </v-list-item-content>
               </v-list-item>
 
@@ -168,8 +190,14 @@
                   <v-list-item-title>วันออกใบรับรองอิเล็กทรอนิกส์</v-list-item-title>
                 </v-list-item-content>
 
-                <v-list-item-content :class="[changeColorVal]">
-                  {{ new Date(v.dsSignerCertificateDn.start) }}
+                <v-list-item-content>
+                  <div v-if="v.dsSignerCertificateDn.issuerDn.commonName === 'Yoursign by ThaiAI'"
+                       class="text-lime-700">
+                    {{ new Date(v.dsSignerCertificateDn.start) }}
+                  </div>
+                  <div v-else>
+                    {{ new Date(v.dsSignerCertificateDn.start) }}
+                  </div>
                 </v-list-item-content>
               </v-list-item>
 
@@ -178,8 +206,14 @@
                   <v-list-item-title>วันหมดอายุใบรับรองอิเล็กทรอนิกส์</v-list-item-title>
                 </v-list-item-content>
 
-                <v-list-item-content :class="[changeColorVal]">
-                  {{ new Date(v.dsSignerCertificateDn.end) }}
+                <v-list-item-content>
+                  <div v-if="v.dsSignerCertificateDn.issuerDn.commonName === 'Yoursign by ThaiAI'"
+                       class="text-lime-700">
+                    {{ new Date(v.dsSignerCertificateDn.end) }}
+                  </div>
+                  <div v-else>
+                    {{ new Date(v.dsSignerCertificateDn.end) }}
+                  </div>
                 </v-list-item-content>
               </v-list-item>
 
@@ -194,11 +228,21 @@
                   <v-list-item-title>ผลการตรวจสอบการประทับรับรองเวลา</v-list-item-title>
                 </v-list-item-content>
 
-                <v-list-item-content>
-                  <v-list-item-icon>
-                    <v-icon left color="success" v-text="v.tsCertPathTrusted ? 'mdi-check-bold': ''"></v-icon>
-                    <div v-text="v.tsCertPathTrusted ? 'Trusted': 'ไม่พบการประทับรับรองเวลาในระบบ Exkasan'"></div>
+                <v-list-item-content v-if="v.tsCertPathTrusted">
+                  <v-list-item-icon
+                      v-if="v.tsSignerCertificateDn.subjectDn.commonName === 'Advancert by ThaiAI'">
+                    <v-icon left color="success">mdi-checkbox-marked-circle</v-icon>
+                    <div class="text-lime-700 font-bold">Trusted ออกจากระบบ Exkasan</div>
                   </v-list-item-icon>
+
+                  <v-list-item-icon v-else>
+                    <v-icon left color="success">mdi-checkbox-marked-circle</v-icon>
+                    <div class="text-lime-700 font-bold">Trusted</div>
+                  </v-list-item-icon>
+                </v-list-item-content>
+
+                <v-list-item-content v-else>
+                  <v-list-item-title class="font-bold">ไม่พบการประทับรับรองเวลาในระบบ Exkasan</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
 
@@ -208,9 +252,13 @@
                 </v-list-item-content>
 
                 <v-list-item-content>
-                  <v-list-item-title :class="[changeColorVal]">
+                  <div class="text-lime-700"
+                       v-if="v.tsSignerCertificateDn.subjectDn.commonName === 'Advancert by ThaiAI'">
                     {{ v.tsSignerCertificateDn.subjectDn.organization }}
-                  </v-list-item-title>
+                  </div>
+                  <div v-else>
+                    {{ v.tsSignerCertificateDn.subjectDn.organization }}
+                  </div>
                 </v-list-item-content>
               </v-list-item>
 
@@ -220,9 +268,13 @@
                 </v-list-item-content>
 
                 <v-list-item-content>
-                  <v-list-item-title :class="[changeColorVal]">
+                  <div class="text-lime-700"
+                       v-if="v.tsSignerCertificateDn.subjectDn.commonName === 'Advancert by ThaiAI'">
                     {{ v.tsSignerCertificateDn.subjectDn.commonName }}
-                  </v-list-item-title>
+                  </div>
+                  <div v-else>
+                    {{ v.tsSignerCertificateDn.subjectDn.commonName }}
+                  </div>
                 </v-list-item-content>
               </v-list-item>
 
@@ -232,9 +284,13 @@
                 </v-list-item-content>
 
                 <v-list-item-content>
-                  <v-list-item-title :class="changeColorVal">
+                  <div class="text-lime-700"
+                       v-if="v.tsSignerCertificateDn.subjectDn.commonName === 'Advancert by ThaiAI'">
                     {{ v.tsSignerCertificateDn.issuerDn.commonName }}
-                  </v-list-item-title>
+                  </div>
+                  <div v-else>
+                    {{ v.tsSignerCertificateDn.issuerDn.commonName }}
+                  </div>
                 </v-list-item-content>
               </v-list-item>
 
@@ -244,9 +300,13 @@
                 </v-list-item-content>
 
                 <v-list-item-content>
-                  <v-list-item-title :class="changeColorVal">
+                  <div class="text-lime-700"
+                       v-if="v.tsSignerCertificateDn.subjectDn.commonName === 'Advancert by ThaiAI'">
                     {{ new Date(v.tsSignerCertificateDn.start) }}
-                  </v-list-item-title>
+                  </div>
+                  <div v-else>
+                    {{ new Date(v.tsSignerCertificateDn.start) }}
+                  </div>
                 </v-list-item-content>
               </v-list-item>
 
@@ -256,9 +316,13 @@
                 </v-list-item-content>
 
                 <v-list-item-content>
-                  <v-list-item-title :class="changeColorVal">
+                  <div class="text-lime-700"
+                       v-if="v.tsSignerCertificateDn.subjectDn.commonName === 'Advancert by ThaiAI'">
                     {{ new Date(v.tsSignerCertificateDn.end) }}
-                  </v-list-item-title>
+                  </div>
+                  <div v-else>
+                    {{ new Date(v.tsSignerCertificateDn.end) }}
+                  </div>
                 </v-list-item-content>
               </v-list-item>
             </div>
@@ -283,11 +347,22 @@
                   <v-list-item-title>ผลการตรวจสอบ</v-list-item-title>
                 </v-list-item-content>
 
-                <v-list-item-content>
-                  <v-list-item-icon>
-                    <v-icon left color="success" v-text="v.tsCertPathTrusted ? 'mdi-check-bold': ''"></v-icon>
-                    <div v-text="v.tsCertPathTrusted ? 'Trusted': 'ไม่พบการประทับรับรองเวลาในระบบ Exkasan'"></div>
+                <v-list-item-content v-if="v.tsCertPathTrusted">
+                  <v-list-item-icon v-if="v.tsSignerCertificateDn.subjectDn.commonName === 'Advancert by ThaiAI'">
+                    <v-icon left color="success">mdi-checkbox-marked-circle</v-icon>
+                    <div class="text-lime-700 font-bold">Trusted ออกจากระบบ Exkasan</div>
                   </v-list-item-icon>
+
+                  <v-list-item-icon v-else>
+                    <v-icon left color="success">mdi-checkbox-marked-circle</v-icon>
+                    <div class="text-lime-700 font-bold">Trusted</div>
+                  </v-list-item-icon>
+                </v-list-item-content>
+
+                <v-list-item-content v-else>
+                  <v-list-item-title>
+                    <div class="font-bold"> ไม่พบการประทับรับรองเวลาในระบบ Exkasan</div>
+                  </v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
 
@@ -297,9 +372,13 @@
                 </v-list-item-content>
 
                 <v-list-item-content>
-                  <v-list-item-title :class="changeColorVal">
+                  <div class="text-lime-700"
+                       v-if="v.tsSignerCertificateDn.subjectDn.commonName === 'Advancert by ThaiAI'">
                     {{ v.tsSignerCertificateDn.subjectDn.commonName }}
-                  </v-list-item-title>
+                  </div>
+                  <div v-else>
+                    {{ v.tsSignerCertificateDn.subjectDn.commonName }}
+                  </div>
                 </v-list-item-content>
               </v-list-item>
 
@@ -309,9 +388,13 @@
                 </v-list-item-content>
 
                 <v-list-item-content>
-                  <v-list-item-title :class="changeColorVal">
+                  <div class="text-lime-700"
+                       v-if="v.tsSignerCertificateDn.subjectDn.commonName === 'Advancert by ThaiAI'">
                     {{ v.tsSignerCertificateDn.issuerDn.commonName }}
-                  </v-list-item-title>
+                  </div>
+                  <div v-else>
+                    {{ v.tsSignerCertificateDn.issuerDn.commonName }}
+                  </div>
                 </v-list-item-content>
               </v-list-item>
 
@@ -321,9 +404,13 @@
                 </v-list-item-content>
 
                 <v-list-item-content>
-                  <v-list-item-title :class="changeColorVal">
+                  <div class="text-lime-700"
+                       v-if="v.tsSignerCertificateDn.subjectDn.commonName === 'Advancert by ThaiAI'">
                     {{ new Date(v.tsSignerCertificateDn.start) }}
-                  </v-list-item-title>
+                  </div>
+                  <div v-else>
+                    {{ new Date(v.tsSignerCertificateDn.start) }}
+                  </div>
                 </v-list-item-content>
               </v-list-item>
 
@@ -333,9 +420,13 @@
                 </v-list-item-content>
 
                 <v-list-item-content>
-                  <v-list-item-title :class="changeColorVal">
+                  <div class="text-lime-700"
+                       v-if="v.tsSignerCertificateDn.subjectDn.commonName === 'Advancert by ThaiAI'">
                     {{ new Date(v.tsSignerCertificateDn.end) }}
-                  </v-list-item-title>
+                  </div>
+                  <div v-else>
+                    {{ new Date(v.tsSignerCertificateDn.end) }}
+                  </div>
                 </v-list-item-content>
               </v-list-item>
 
@@ -387,7 +478,7 @@
 
     <v-card-actions>
       <v-btn
-          @click="$router.push('/')"
+          @click="$router.push('/validate')"
           color="black"
           rounded
           text
@@ -419,42 +510,11 @@ export default {
 
   created() {
     if (!this.filename)
-      this.$router.push('/')
+      this.$router.push('/validate')
+    this.conditionAC_TS();
   },
 
   computed: {
-    changeColorVal() {
-      let text = '';
-      let num = 0;
-      let ds = 0;
-      let ts = 0;
-      if (this.transaction.signatures) {
-        let signatures = this.transaction.signatures
-        signatures.forEach((val) => {
-          if (val.dsSignerCertificateDn) {
-            ds += 1
-            this.dsSign = ds;
-            if (val.dsSignerCertificateDn.issuerDn.commonName === 'Yoursign by ThaiAI') {
-              this.countYourSign += 1
-              if (this.countYourSign === 1)
-                text += 'text-lime-700'
-            }
-          }
-          if (!val.dsSignerCertificateDn) {
-            ts += 1
-            this.tsSign = ts;
-          }
-          if (!val.dsSignerCertificateDn) {
-            if (val.tsSignerCertificateDn.subjectDn.commonName === 'Advancert by ThaiAI') {
-              this.countAvancert += 1
-              if (this.countAvancert === 1)
-                text += 'text-lime-700'
-            }
-          }
-        })
-      }
-      return text
-    },
     transaction() {
       return this.$route.params.transaction
     },
@@ -466,6 +526,31 @@ export default {
     Overlay
   },
   methods: {
+    conditionAC_TS() {
+      let ds = 0;
+      let ts = 0;
+      if (this.transaction.signatures) {
+        let signatures = this.transaction.signatures
+        signatures.forEach((val) => {
+              if (val.dsSignerCertificateDn) {
+                ds += 1
+                this.dsSign = ds;
+                if (val.dsSignerCertificateDn.issuerDn.commonName === 'Yoursign by ThaiAI') {
+                  this.countYourSign += 1
+                }
+              }
+
+              if (!val.dsSignerCertificateDn) {
+                ts += 1
+                this.tsSign = ts;
+                if (val.tsSignerCertificateDn.subjectDn.commonName === 'Advancert by ThaiAI') {
+                  this.countAvancert += 1
+                }
+              }
+            }
+        )
+      }
+    },
     initialized() {
       this.overlay = !this.transaction;
     }

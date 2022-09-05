@@ -32,12 +32,6 @@ module.exports = {
     publicRuntimeConfig: {
         siteKey: process.env.SITEKEY,
         secretKey: process.env.SECRETKEY,
-        baseURLValidate: process.env.BASE_URL_VALIDATE,
-        baseURLTimestamp: process.env.BASE_URL_TIMESTAMP,
-        apiVerifyExkasan: process.env.API_VERIFY_EXKASAN,
-        apiTimeStampExkasan: process.env.API_TIMESTAMP_EXKASAN,
-        apiUploadPdf: process.env.API_UPLOAD_PDF,
-        apiHandelFile: process.env.API_HANDLE_FILE,
         liffId: process.env.LIFFID,
         liffIdTs: process.env.LIFFID_TIMESTAMP,
         basicAuthUsername: process.env.BASIC_AUTH_USERNAME,
