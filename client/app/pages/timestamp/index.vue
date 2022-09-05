@@ -306,9 +306,6 @@ export default {
 
   async created() {
     this.overlay = true
-    console.log(this.$auth.loggedIn)
-    console.log(this.$auth.user)
-    console.log(this.$auth.strategy.name)
     await liff.init({liffId: this.liffIdTs},
         () => {
           if (liff.isLoggedIn()) {
@@ -349,7 +346,6 @@ export default {
             if (liff.isLoggedIn()) {
               liff.getProfile()
                   .then((profile) => {
-                    console.log(profile);
                     this.dialogLogin = false;
                   })
             } else {

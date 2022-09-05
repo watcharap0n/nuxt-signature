@@ -195,8 +195,8 @@ module.exports = {
                 '^/captcha-api': ""
             }
         },
-        '/timestamp/': process.env.BASE_URL,
-        '/signature/': process.env.BASE_URL
+        '/timestamp/': process.env.BASE_URL_BACKEND,
+        '/signature/': process.env.BASE_URL_BACKEND
     }
 
 }
