@@ -23,6 +23,7 @@
                     depressed
                     rounded
                     text
+                    href="https://exkasan.com"
                 >
                   หน้าหลัก
                 </v-btn>
@@ -31,6 +32,7 @@
                     depressed
                     rounded
                     text
+                    href="/validate"
                 >
                   การตรวจสอบเอกสาร
                 </v-btn>
@@ -39,6 +41,7 @@
                     depressed
                     rounded
                     text
+                    href="/timestamp"
                 >
                   การประทับรับรองเวลา
                 </v-btn>

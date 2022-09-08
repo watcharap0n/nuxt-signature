@@ -133,6 +133,8 @@ export default {
       transaction: {},
       pdf_enc: null,
       pdf_pwd: '',
+      basicAuthUsername: this.$config.basicAuthUsername,
+      basicAuthPassword: this.$config.basicAuthPassword,
       file: null,
       authUser: {},
       rules: [
@@ -197,7 +199,11 @@ export default {
         onUploadProgress: function (progressEvent) {
           this.progress = parseInt(Math.round((progressEvent.loaded * 100) / progressEvent.total))
           this.hideProgress = true
-        }.bind(this)
+        }.bind(this),
+        auth: {
+          username: this.basicAuthUsername,
+          password: this.basicAuthPassword
+        }
       }
       let formData = new FormData();
       formData.append('file', this.file);
