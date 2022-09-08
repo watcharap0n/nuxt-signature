@@ -27,9 +27,9 @@ rancher_deploy_stg:
   tags:
     - shell
   stage: deploy-stg
-  # only:
-  #   refs:
-  #     - stg
+  only:
+    refs:
+      - stg
   variables:
     RANCHER_STG_ENDPOINT: https://texus.thaicom.io
   script:
