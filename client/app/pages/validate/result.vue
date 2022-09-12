@@ -136,30 +136,28 @@
                 </v-list-item-content>
 
                 <v-list-item-content v-if="v.dsCertPathTrusted">
-                  <v-list-item-icon>
+                  <v-list-item-title class="font-bold" style="color: #187331">
                     <v-icon left color="#187331">mdi-checkbox-marked-circle</v-icon>
-                    <div class="font-bold" style="color: #187331">
-                      Signature is valid
-                      <tooltips color="#187331"
-                                card-text="มีลายมือชื่อดิจิทัลออกโดยระบบ"
-                                card-header="Signature is valid"
-                      />
-                    </div>
-                  </v-list-item-icon>
+                    Signature is valid
+                    <tooltips color="#187331"
+                              card-text="มีลายมือชื่อดิจิทัลออกโดยระบบ"
+                              card-header="Signature is valid"
+                    />
+                  </v-list-item-title>
                 </v-list-item-content>
 
                 <v-list-item-content v-else>
-                  <v-list-item-icon
-                      v-if="v.dsSignerCertificateDn.issuerDn.commonName === 'Yoursign by ThaiAI'">
+                  <v-list-item-title
+                      v-if="v.dsSignerCertificateDn.issuerDn.commonName === 'Yoursign by ThaiAI'"
+                      class="font-bold" style="color: #187331"
+                  >
                     <v-icon left color="#187331">mdi-checkbox-marked-circle</v-icon>
-                    <div class="font-bold" style="color: #187331">
-                      Signature is valid
-                      <tooltips color="#187331"
-                                card-text="มีลายมือชื่อดิจิทัลออกโดยระบบ"
-                                card-header="Signature is valid"
-                      />
-                    </div>
-                  </v-list-item-icon>
+                    Signature is valid
+                    <tooltips color="#187331"
+                              card-text="มีลายมือชื่อดิจิทัลออกโดยระบบ"
+                              card-header="Signature is valid"
+                    />
+                  </v-list-item-title>
 
                   <v-list-item-title v-else class="font-bold" style="color: #e8b502">
                     <v-icon left style="color: #e8b502">mdi-alert</v-icon>
@@ -169,7 +167,7 @@
                               color-icon="#e8b502"
                               color-header="#e8b502"
                               card-header="Signature requires validating"
-                              card-text="ลามือชื่อดิจิทัลไม่ได้ถูกออกโดยระบบ"/>
+                              card-text="ลายมือชื่อดิจิทัลไม่ได้ถูกออกโดยระบบ"/>
                   </v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
@@ -250,15 +248,14 @@
                 </v-list-item-content>
 
                 <v-list-item-content v-if="v.tsCertPathTrusted">
-                  <v-list-item-icon>
+                  <v-list-item-title style="color: #187331" class="font-bold">
                     <v-icon left color="#187331">mdi-checkbox-marked-circle</v-icon>
-                    <div class="font-bold" style="color: #187331">Timestamp is valid
-                      <tooltips color="#187331"
-                                card-text="มีการประทับรับรองเวลาอิเล็กทรอนิกส์ออกโดยระบบ"
-                                card-header="Timestamp is valid"
-                      />
-                    </div>
-                  </v-list-item-icon>
+                    Timestamp is valid
+                    <tooltips color="#187331"
+                              card-text="มีการประทับรับรองเวลาอิเล็กทรอนิกส์ออกโดยระบบ"
+                              card-header="Timestamp is valid"
+                    />
+                  </v-list-item-title>
                 </v-list-item-content>
 
                 <v-list-item-content v-else>
@@ -543,7 +540,7 @@
         <strong> Signature requires validating and Timestamp requires validating : </strong>
         ใบรับรองที่ออกโดยผู้ให้บริการที่ไม่ได้อยู่ใน <a
           href="https://helpx.adobe.com/th_th/acrobat/kb/approved-trust-list1.html"> Adobe Approved Trust List
-        (AATL) และ European Union
+        (AATL)</a> และ <a href="https://esignature.ec.europa.eu/efda/tl-browser/#/screen/home">European Union
         Trusted List
         (EUTL) </a> หรืออื่นๆที่ปรากฏในระบบ Exkasan </small>
     </div>
@@ -611,8 +608,6 @@ export default {
             }
         )
       }
-      console.log(this.countYourSign)
-      console.log(this.countAvancert)
     },
     initialized() {
       this.overlay = !this.transaction;
