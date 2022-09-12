@@ -64,17 +64,51 @@
             </div>
           </v-card-text>
         </v-card>
-        <br>
-        <br>
-        <div style="margin-left: -30px">
-          <recaptcha
-              id="recaptcha"
-              @error="onError"
-              @success="onSuccess"
-              @expired="onExpired"
-          />
-        </div>
+      </v-card>
+      <br>
+      <br>
+      <div style="margin-left: -30px">
+        <recaptcha
+            id="recaptcha"
+            @error="onError"
+            @success="onSuccess"
+            @expired="onExpired"
+        />
+      </div>
 
+      <v-card flat>
+        <v-card-text>
+          <v-row justify="center" align="center">
+            <v-checkbox
+                color="lime"
+                v-model="checkbox"
+                dense>
+              <template v-slot:label>
+                <small style="margin-top: 10px">
+                  การตรวจสอบเอกสารดังกล่าว ผู้ใช้บริการยินยอมให้บริษัทตรวจสอบเอกสารและ
+                  บริษัทยืนยันว่า <br> ไม่ได้มีการเก็บเอกสาร หรือเนื้อหาส่วนหนึ่งส่วนใดไว้ในระบบ
+                  โดยสามารถคลิกเพื่ออ่าน
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on }">
+                      <a
+                          target="_blank"
+                          href="https://exkasan.com/privacy.html"
+                          @click.stop
+                          v-on="on"
+                      >
+                        เงื่อนไขการให้บริการ
+                      </a>
+                    </template>
+                    เงื่อนไขการให้บริการ
+                  </v-tooltip>
+                </small>
+              </template>
+            </v-checkbox>
+          </v-row>
+        </v-card-text>
+      </v-card>
+
+      <v-card flat style="margin-top: -10px">
         <v-card-actions>
           <v-row>
             <v-col cols="6" sm="6">
@@ -103,14 +137,6 @@
           </v-row>
         </v-card-actions>
       </v-card>
-
-      <v-card-text>
-        <div class="text-center">
-          การตรวจสอบเอกสารดังกล่าว ผู้ใช้บริการยินยอมให้บริษัทตรวจสอบเอกสารและบริษัทยืนยันว่าไม่ได้มีการเก็บเอกสาร <br>
-          หรือเนื้อหาส่วนหนึ่งส่วนใดไว้ในระบบ
-          ในกรณีที่เนื้อหาของเอกสารรั่วไหลไปยังบุคคลภายนอก ทางบริษัทจะไม่รับผิดชอบความเสียหายใดๆทั้งสิ้น
-        </div>
-      </v-card-text>
     </div>
 
   </v-container>
@@ -122,6 +148,8 @@ import liff from '@line/liff';
 export default {
   data() {
     return {
+      recaptcha: false,
+      checkbox: false,
       hideProgress: false,
       progress: 0,
       handleEvent: false,
@@ -152,6 +180,13 @@ export default {
       await this.$recaptcha.init();
     } catch (e) {
       console.error(e);
+    }
+  },
+
+  watch: {
+    checkbox(val) {
+      if (this.recaptcha)
+        this.btnSubmit = !this.btnSubmit
     }
   },
 
@@ -191,6 +226,7 @@ export default {
             console.error(err)
           })
     },
+
 
     async validate_exkasan() {
       this.spin = true;
@@ -268,8 +304,9 @@ export default {
     },
 
     onSuccess(token) {
-      this.btnSubmit = true;
+      this.recaptcha = true
     },
+
     onExpired() {
       console.log('Expired')
     },

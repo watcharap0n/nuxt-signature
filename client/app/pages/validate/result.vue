@@ -92,7 +92,7 @@
             </v-list-item-content>
 
             <v-list-item-content>
-              <v-list-item-title v-if="countYourSign > 0">{{ countYourSign }}</v-list-item-title>
+              <v-list-item-title v-if="countYourSign >= 0">{{ countYourSign }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
 
@@ -102,7 +102,7 @@
             </v-list-item-content>
 
             <v-list-item-content>
-              <v-list-item-title v-if="countAvancert > 0">{{ countAvancert }}</v-list-item-title>
+              <v-list-item-title v-if="countAvancert >= 0">{{ countAvancert }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </div>
@@ -137,10 +137,13 @@
 
                 <v-list-item-content v-if="v.dsCertPathTrusted">
                   <v-list-item-icon>
-                    <v-icon left color="success">mdi-checkbox-marked-circle</v-icon>
-                    <div class="font-bold">
+                    <v-icon left color="#187331">mdi-checkbox-marked-circle</v-icon>
+                    <div class="font-bold" style="color: #187331">
                       Signature is valid
-                      <tooltips color="success"/>
+                      <tooltips color="#187331"
+                                card-text="มีลายมือชื่อดิจิทัลออกโดยระบบ"
+                                card-header="Signature is valid"
+                      />
                     </div>
                   </v-list-item-icon>
                 </v-list-item-content>
@@ -148,16 +151,25 @@
                 <v-list-item-content v-else>
                   <v-list-item-icon
                       v-if="v.dsSignerCertificateDn.issuerDn.commonName === 'Yoursign by ThaiAI'">
-                    <v-icon left color="success">mdi-checkbox-marked-circle</v-icon>
-                    <div class="text-lime-700 font-bold">Signature is valid
-                      <tooltips color="success"/>
+                    <v-icon left color="#187331">mdi-checkbox-marked-circle</v-icon>
+                    <div class="font-bold" style="color: #187331">
+                      Signature is valid
+                      <tooltips color="#187331"
+                                card-text="มีลายมือชื่อดิจิทัลออกโดยระบบ"
+                                card-header="Signature is valid"
+                      />
                     </div>
                   </v-list-item-icon>
 
-                  <v-list-item-title v-else class="font-bold" style="color: #ffc700">
-                    <v-icon left style="color: #ffc700">mdi-alert</v-icon>
+                  <v-list-item-title v-else class="font-bold" style="color: #e8b502">
+                    <v-icon left style="color: #e8b502">mdi-alert</v-icon>
                     Signature requires validating
-                    <tooltips color="#ffc700"/>
+                    <tooltips color="#e8b502"
+                              icon="mdi-alert"
+                              color-icon="#e8b502"
+                              color-header="#e8b502"
+                              card-header="Signature requires validating"
+                              card-text="ลามือชื่อดิจิทัลไม่ได้ถูกออกโดยระบบ"/>
                   </v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
@@ -172,7 +184,7 @@
                        class="text-lime-700">
                     {{ v.dsSignerCertificateDn.issuerDn.commonName }}
                   </div>
-                  <div v-else>
+                  <div v-else style="color: #e8b502">
                     {{ v.dsSignerCertificateDn.issuerDn.commonName }}
                   </div>
                 </v-list-item-content>
@@ -188,7 +200,7 @@
                        class="text-lime-700">
                     {{ v.dsSignerCertificateDn.issuerDn.commonName }}
                   </div>
-                  <div v-else>
+                  <div v-else style="color: #e8b502">
                     {{ v.dsSignerCertificateDn.issuerDn.commonName }}
                   </div>
                 </v-list-item-content>
@@ -204,7 +216,7 @@
                        class="text-lime-700">
                     {{ new Date(v.dsSignerCertificateDn.start) }}
                   </div>
-                  <div v-else>
+                  <div v-else style="color: #e8b502">
                     {{ new Date(v.dsSignerCertificateDn.start) }}
                   </div>
                 </v-list-item-content>
@@ -220,7 +232,7 @@
                        class="text-lime-700">
                     {{ new Date(v.dsSignerCertificateDn.end) }}
                   </div>
-                  <div v-else>
+                  <div v-else style="color: #e8b502">
                     {{ new Date(v.dsSignerCertificateDn.end) }}
                   </div>
                 </v-list-item-content>
@@ -239,16 +251,25 @@
 
                 <v-list-item-content v-if="v.tsCertPathTrusted">
                   <v-list-item-icon>
-                    <v-icon left color="success">mdi-checkbox-marked-circle</v-icon>
-                    <div class="text-lime-700 font-bold">Timestamp is valid
-                      <tooltips color="success"/>
+                    <v-icon left color="#187331">mdi-checkbox-marked-circle</v-icon>
+                    <div class="font-bold" style="color: #187331">Timestamp is valid
+                      <tooltips color="#187331"
+                                card-text="มีการประทับรับรองเวลาอิเล็กทรอนิกส์ออกโดยระบบ"
+                                card-header="Timestamp is valid"
+                      />
                     </div>
                   </v-list-item-icon>
                 </v-list-item-content>
 
                 <v-list-item-content v-else>
-                  <v-list-item-title class="font-bold" style="color: #ffc700">Timestamp requires validating
-                    <tooltips color="#ffc700"/>
+                  <v-list-item-title class="font-bold" style="color: #e8b502">Timestamp requires validating
+                    <tooltips color="#e8b502"
+                              icon="mdi-alert"
+                              color-icon="#e8b502"
+                              color-header="#e8b502"
+                              card-text="Timestamp requires validating"
+                              card-header="การประทับรับรองเวลาอิเล็กทรอนิกส์ไม่ได้ถูกออกโดยระบบ"
+                    />
                   </v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
@@ -260,10 +281,10 @@
 
                 <v-list-item-content>
                   <div class="text-lime-700"
-                       v-if="v.tsSignerCertificateDn.subjectDn.commonName === 'Advancert by ThaiAI'">
+                       v-if="v.tsCertPathTrusted">
                     {{ v.tsSignerCertificateDn.subjectDn.organization }}
                   </div>
-                  <div v-else>
+                  <div v-else style="color: #e8b502">
                     {{ v.tsSignerCertificateDn.subjectDn.organization }}
                   </div>
                 </v-list-item-content>
@@ -276,10 +297,10 @@
 
                 <v-list-item-content>
                   <div class="text-lime-700"
-                       v-if="v.tsSignerCertificateDn.subjectDn.commonName === 'Advancert by ThaiAI'">
+                       v-if="v.tsCertPathTrusted">
                     {{ v.tsSignerCertificateDn.subjectDn.commonName }}
                   </div>
-                  <div v-else>
+                  <div v-else style="color: #e8b502">
                     {{ v.tsSignerCertificateDn.subjectDn.commonName }}
                   </div>
                 </v-list-item-content>
@@ -292,10 +313,10 @@
 
                 <v-list-item-content>
                   <div class="text-lime-700"
-                       v-if="v.tsSignerCertificateDn.subjectDn.commonName === 'Advancert by ThaiAI'">
+                       v-if="v.tsCertPathTrusted">
                     {{ v.tsSignerCertificateDn.issuerDn.commonName }}
                   </div>
-                  <div v-else>
+                  <div v-else style="color: #e8b502">
                     {{ v.tsSignerCertificateDn.issuerDn.commonName }}
                   </div>
                 </v-list-item-content>
@@ -308,10 +329,10 @@
 
                 <v-list-item-content>
                   <div class="text-lime-700"
-                       v-if="v.tsSignerCertificateDn.subjectDn.commonName === 'Advancert by ThaiAI'">
+                       v-if="v.tsCertPathTrusted">
                     {{ new Date(v.tsSignerCertificateDn.start) }}
                   </div>
-                  <div v-else>
+                  <div v-else style="color: #e8b502">
                     {{ new Date(v.tsSignerCertificateDn.start) }}
                   </div>
                 </v-list-item-content>
@@ -324,10 +345,10 @@
 
                 <v-list-item-content>
                   <div class="text-lime-700"
-                       v-if="v.tsSignerCertificateDn.subjectDn.commonName === 'Advancert by ThaiAI'">
+                       v-if="v.tsCertPathTrusted">
                     {{ new Date(v.tsSignerCertificateDn.end) }}
                   </div>
-                  <div v-else>
+                  <div v-else style="color: #e8b502">
                     {{ new Date(v.tsSignerCertificateDn.end) }}
                   </div>
                 </v-list-item-content>
@@ -344,7 +365,9 @@
           >
             <template v-slot:activator>
               <v-list-item-content>
-                <v-list-item-title>Rev.{{ k + 1 }} Timestamp</v-list-item-title>
+                <v-list-item-title>Rev.{{ k + 1 }} ข้อมูลการประทับรับรองเวลาอิเล็กทรอนิกส์ (Electronic
+                  Timestamp)
+                </v-list-item-title>
               </v-list-item-content>
             </template>
 
@@ -356,20 +379,25 @@
 
                 <v-list-item-content v-if="v.tsCertPathTrusted">
                   <v-list-item-icon>
-                    <v-icon left color="success">mdi-checkbox-marked-circle</v-icon>
-                    <div class="text-lime-700 font-bold">
-                      Timestamp is valid
-                      <tooltips color="success"/>
+                    <v-icon left color="#187331">mdi-checkbox-marked-circle</v-icon>
+                    <div class="font-bold" style="color: #187331">Timestamp is valid
+                      <tooltips color="#187331"
+                                card-text="มีการประทับรับรองเวลาอิเล็กทรอนิกส์ออกโดยระบบ"
+                                card-header="Timestamp is valid"
+                      />
                     </div>
                   </v-list-item-icon>
                 </v-list-item-content>
 
                 <v-list-item-content v-else>
-                  <v-list-item-title>
-                    <v-icon left style="color: #ffc700">mdi-alert</v-icon>
-                    <div class="font-bold">Timestamp requires validating
-                      <tooltips color="#ffc700"/>
-                    </div>
+                  <v-list-item-title class="font-bold" style="color: #e8b502">Timestamp requires validating
+                    <tooltips color="#e8b502"
+                              icon="mdi-alert"
+                              color-icon="#e8b502"
+                              color-header="#e8b502"
+                              card-text="Timestamp requires validating"
+                              card-header="การประทับรับรองเวลาอิเล็กทรอนิกส์ไม่ได้ถูกออกโดยระบบ"
+                    />
                   </v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
@@ -381,7 +409,7 @@
 
                 <v-list-item-content>
                   <div class="text-lime-700"
-                       v-if="v.tsSignerCertificateDn.subjectDn.commonName === 'Advancert by ThaiAI'">
+                       v-if="v.tsCertPathTrusted">
                     {{ v.tsSignerCertificateDn.subjectDn.commonName }}
                   </div>
                   <div v-else>
@@ -397,7 +425,7 @@
 
                 <v-list-item-content>
                   <div class="text-lime-700"
-                       v-if="v.tsSignerCertificateDn.subjectDn.commonName === 'Advancert by ThaiAI'">
+                       v-if="v.tsCertPathTrusted">
                     {{ v.tsSignerCertificateDn.issuerDn.commonName }}
                   </div>
                   <div v-else>
@@ -413,7 +441,7 @@
 
                 <v-list-item-content>
                   <div class="text-lime-700"
-                       v-if="v.tsSignerCertificateDn.subjectDn.commonName === 'Advancert by ThaiAI'">
+                       v-if="v.tsCertPathTrusted">
                     {{ new Date(v.tsSignerCertificateDn.start) }}
                   </div>
                   <div v-else>
@@ -429,7 +457,7 @@
 
                 <v-list-item-content>
                   <div class="text-lime-700"
-                       v-if="v.tsSignerCertificateDn.subjectDn.commonName === 'Advancert by ThaiAI'">
+                       v-if="v.tsCertPathTrusted">
                     {{ new Date(v.tsSignerCertificateDn.end) }}
                   </div>
                   <div v-else>
@@ -497,6 +525,27 @@
       <v-spacer></v-spacer>
     </v-card-actions>
     <Overlay color="lime" :overlay="overlay"></Overlay>
+
+    <br>
+    ผลการตรวจสอบขึ้นอยู่กับลายมือชื่อดิจิทัลและการประทับรับรองเวลาอิเล็กทรอนิกส์ดังต่อไปนี้
+    <div style="margin-left: 20px">
+      <small style="font-size: 10px">
+        <strong>Signature is valid and Timestamp is valid : </strong> ใบรับรองที่ออกโดยผู้ให้บริการที่อยู่ใน <a
+          href="https://helpx.adobe.com/th_th/acrobat/kb/approved-trust-list1.html"> Adobe
+        Approved Trust
+        List (AATL) </a> และ <a href="https://esignature.ec.europa.eu/efda/tl-browser/#/screen/home"> European Union
+        Trusted List (EUTL) </a> หรืออื่นๆที่ปรากฏในระบบ Exkasan
+      </small>
+
+      <br>
+      <small style="font-size: 10px">
+        <strong> Signature requires validating and Timestamp requires validating : </strong>
+        ใบรับรองที่ออกโดยผู้ให้บริการที่ไม่ได้อยู่ใน <a
+          href="https://helpx.adobe.com/th_th/acrobat/kb/approved-trust-list1.html"> Adobe Approved Trust List
+        (AATL) และ European Union
+        Trusted List
+        (EUTL) </a> หรืออื่นๆที่ปรากฏในระบบ Exkasan </small>
+    </div>
   </v-container>
 </template>
 
@@ -561,6 +610,8 @@ export default {
             }
         )
       }
+      console.log(this.countYourSign)
+      console.log(this.countAvancert)
     },
     initialized() {
       this.overlay = !this.transaction;
