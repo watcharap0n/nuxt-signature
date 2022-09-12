@@ -138,7 +138,10 @@
                 <v-list-item-content v-if="v.dsCertPathTrusted">
                   <v-list-item-icon>
                     <v-icon left color="success">mdi-checkbox-marked-circle</v-icon>
-                    <div class="font-bold">Trusted</div>
+                    <div class="font-bold">
+                      Signature is valid
+                      <tooltips color="success"/>
+                    </div>
                   </v-list-item-icon>
                 </v-list-item-content>
 
@@ -146,10 +149,16 @@
                   <v-list-item-icon
                       v-if="v.dsSignerCertificateDn.issuerDn.commonName === 'Yoursign by ThaiAI'">
                     <v-icon left color="success">mdi-checkbox-marked-circle</v-icon>
-                    <div class="text-lime-700 font-bold">Trusted ออกจากระบบ Exkasan</div>
+                    <div class="text-lime-700 font-bold">Signature is valid
+                      <tooltips color="success"/>
+                    </div>
                   </v-list-item-icon>
 
-                  <v-list-item-title v-else class="font-bold">ไม่พบลายมือชื่อดิจิทัลในระบบ Exkasan</v-list-item-title>
+                  <v-list-item-title v-else class="font-bold" style="color: #ffc700">
+                    <v-icon left style="color: #ffc700">mdi-alert</v-icon>
+                    Signature requires validating
+                    <tooltips color="#ffc700"/>
+                  </v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
 
@@ -229,20 +238,18 @@
                 </v-list-item-content>
 
                 <v-list-item-content v-if="v.tsCertPathTrusted">
-                  <v-list-item-icon
-                      v-if="v.tsSignerCertificateDn.subjectDn.commonName === 'Advancert by ThaiAI'">
+                  <v-list-item-icon>
                     <v-icon left color="success">mdi-checkbox-marked-circle</v-icon>
-                    <div class="text-lime-700 font-bold">Trusted ออกจากระบบ Exkasan</div>
-                  </v-list-item-icon>
-
-                  <v-list-item-icon v-else>
-                    <v-icon left color="success">mdi-checkbox-marked-circle</v-icon>
-                    <div class="text-lime-700 font-bold">Trusted</div>
+                    <div class="text-lime-700 font-bold">Timestamp is valid
+                      <tooltips color="success"/>
+                    </div>
                   </v-list-item-icon>
                 </v-list-item-content>
 
                 <v-list-item-content v-else>
-                  <v-list-item-title class="font-bold">ไม่พบการประทับรับรองเวลาในระบบ Exkasan</v-list-item-title>
+                  <v-list-item-title class="font-bold" style="color: #ffc700">Timestamp requires validating
+                    <tooltips color="#ffc700"/>
+                  </v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
 
@@ -348,20 +355,21 @@
                 </v-list-item-content>
 
                 <v-list-item-content v-if="v.tsCertPathTrusted">
-                  <v-list-item-icon v-if="v.tsSignerCertificateDn.subjectDn.commonName === 'Advancert by ThaiAI'">
+                  <v-list-item-icon>
                     <v-icon left color="success">mdi-checkbox-marked-circle</v-icon>
-                    <div class="text-lime-700 font-bold">Trusted ออกจากระบบ Exkasan</div>
-                  </v-list-item-icon>
-
-                  <v-list-item-icon v-else>
-                    <v-icon left color="success">mdi-checkbox-marked-circle</v-icon>
-                    <div class="text-lime-700 font-bold">Trusted</div>
+                    <div class="text-lime-700 font-bold">
+                      Timestamp is valid
+                      <tooltips color="success"/>
+                    </div>
                   </v-list-item-icon>
                 </v-list-item-content>
 
                 <v-list-item-content v-else>
                   <v-list-item-title>
-                    <div class="font-bold"> ไม่พบการประทับรับรองเวลาในระบบ Exkasan</div>
+                    <v-icon left style="color: #ffc700">mdi-alert</v-icon>
+                    <div class="font-bold">Timestamp requires validating
+                      <tooltips color="#ffc700"/>
+                    </div>
                   </v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
@@ -495,6 +503,7 @@
 
 <script>
 import Overlay from "@/components/Overlay";
+import Tooltips from "@/components/Tooltips";
 
 export default {
   data() {
@@ -514,6 +523,7 @@ export default {
     this.conditionAC_TS();
   },
 
+
   computed: {
     transaction() {
       return this.$route.params.transaction
@@ -523,7 +533,8 @@ export default {
     }
   },
   components: {
-    Overlay
+    Overlay,
+    Tooltips
   },
   methods: {
     conditionAC_TS() {

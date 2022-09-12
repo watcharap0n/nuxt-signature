@@ -1,5 +1,10 @@
 module.exports = {
     build: {
+        build: {
+            analyze: {
+                analyzerMode: 'static'
+            }
+        },
         html: {
             minify: {
                 collapseBooleanAttributes: true,
@@ -56,9 +61,6 @@ module.exports = {
         script: [
             {
                 src: 'https://accounts.google.com/gsi/client'
-            },
-            {
-                src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js'
             },
             {
                 src: 'https://www.google.com/recaptcha/api.js',
@@ -146,7 +148,7 @@ module.exports = {
                 version: 2
             }
         ],
-        '@nuxtjs/gtm'
+        '@nuxtjs/gtm',
     ],
 
     auth: {
