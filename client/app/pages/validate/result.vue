@@ -179,7 +179,7 @@
 
                 <v-list-item-content>
                   <div v-if="v.dsSignerCertificateDn.issuerDn.commonName === 'Yoursign by ThaiAI'"
-                       class="text-lime-700">
+                       style="color: #187331">
                     {{ v.dsSignerCertificateDn.issuerDn.commonName }}
                   </div>
                   <div v-else style="color: #e8b502">
@@ -195,7 +195,7 @@
 
                 <v-list-item-content>
                   <div v-if="v.dsSignerCertificateDn.issuerDn.commonName === 'Yoursign by ThaiAI'"
-                       class="text-lime-700">
+                       style="color: #187331">
                     {{ v.dsSignerCertificateDn.issuerDn.commonName }}
                   </div>
                   <div v-else style="color: #e8b502">
@@ -211,7 +211,7 @@
 
                 <v-list-item-content>
                   <div v-if="v.dsSignerCertificateDn.issuerDn.commonName === 'Yoursign by ThaiAI'"
-                       class="text-lime-700">
+                       style="color: #187331">
                     {{ new Date(v.dsSignerCertificateDn.start) }}
                   </div>
                   <div v-else style="color: #e8b502">
@@ -227,7 +227,7 @@
 
                 <v-list-item-content>
                   <div v-if="v.dsSignerCertificateDn.issuerDn.commonName === 'Yoursign by ThaiAI'"
-                       class="text-lime-700">
+                       style="color: #187331">
                     {{ new Date(v.dsSignerCertificateDn.end) }}
                   </div>
                   <div v-else style="color: #e8b502">
@@ -278,7 +278,7 @@
                 </v-list-item-content>
 
                 <v-list-item-content>
-                  <div class="text-lime-700"
+                  <div style="color: #187331"
                        v-if="v.tsCertPathTrusted">
                     {{ v.tsSignerCertificateDn.subjectDn.organization }}
                   </div>
@@ -294,7 +294,7 @@
                 </v-list-item-content>
 
                 <v-list-item-content>
-                  <div class="text-lime-700"
+                  <div style="color: #187331"
                        v-if="v.tsCertPathTrusted">
                     {{ v.tsSignerCertificateDn.subjectDn.commonName }}
                   </div>
@@ -310,7 +310,7 @@
                 </v-list-item-content>
 
                 <v-list-item-content>
-                  <div class="text-lime-700"
+                  <div style="color: #187331"
                        v-if="v.tsCertPathTrusted">
                     {{ v.tsSignerCertificateDn.issuerDn.commonName }}
                   </div>
@@ -326,7 +326,7 @@
                 </v-list-item-content>
 
                 <v-list-item-content>
-                  <div class="text-lime-700"
+                  <div style="color: #187331"
                        v-if="v.tsCertPathTrusted">
                     {{ new Date(v.tsSignerCertificateDn.start) }}
                   </div>
@@ -342,7 +342,7 @@
                 </v-list-item-content>
 
                 <v-list-item-content>
-                  <div class="text-lime-700"
+                  <div style="color: #187331"
                        v-if="v.tsCertPathTrusted">
                     {{ new Date(v.tsSignerCertificateDn.end) }}
                   </div>
@@ -406,7 +406,7 @@
                 </v-list-item-content>
 
                 <v-list-item-content>
-                  <div class="text-lime-700"
+                  <div style="color: #187331"
                        v-if="v.tsCertPathTrusted">
                     {{ v.tsSignerCertificateDn.subjectDn.commonName }}
                   </div>
@@ -422,7 +422,7 @@
                 </v-list-item-content>
 
                 <v-list-item-content>
-                  <div class="text-lime-700"
+                  <div style="color: #187331"
                        v-if="v.tsCertPathTrusted">
                     {{ v.tsSignerCertificateDn.issuerDn.commonName }}
                   </div>
@@ -438,7 +438,7 @@
                 </v-list-item-content>
 
                 <v-list-item-content>
-                  <div class="text-lime-700"
+                  <div style="color: #187331"
                        v-if="v.tsCertPathTrusted">
                     {{ new Date(v.tsSignerCertificateDn.start) }}
                   </div>
@@ -454,7 +454,7 @@
                 </v-list-item-content>
 
                 <v-list-item-content>
-                  <div class="text-lime-700"
+                  <div style="color: #187331"
                        v-if="v.tsCertPathTrusted">
                     {{ new Date(v.tsSignerCertificateDn.end) }}
                   </div>
