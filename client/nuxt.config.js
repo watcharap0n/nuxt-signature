@@ -36,6 +36,9 @@ module.exports = {
             video: ({isDev}) => isDev ? '[path][name].[ext]' : 'videos/[name].[contenthash:7].[ext]'
         }
     },
+    serverMiddleware: [
+        '~/server-middleware/headers.js'
+    ],
 
     publicRuntimeConfig: {
         siteKey: process.env.SITEKEY,
