@@ -262,13 +262,14 @@
                 </v-list-item-content>
 
                 <v-list-item-content v-else>
+                  <v-icon left color="#187331">mdi-alert</v-icon>
                   <v-list-item-title class="font-bold" style="color: #e8b502">Timestamp requires validating
                     <tooltips color="#e8b502"
                               icon="mdi-alert"
                               color-icon="#e8b502"
                               color-header="#e8b502"
-                              card-text="Timestamp requires validating"
-                              card-header="การประทับรับรองเวลาอิเล็กทรอนิกส์ไม่ได้ถูกออกโดยระบบ"
+                              card-text="การประทับรับรองเวลาอิเล็กทรอนิกส์ไม่ได้ถูกออกโดยระบบ"
+                              card-header="Timestamp requires validating"
                     />
                   </v-list-item-title>
                 </v-list-item-content>
@@ -412,7 +413,7 @@
                        v-if="v.tsCertPathTrusted">
                     {{ v.tsSignerCertificateDn.subjectDn.commonName }}
                   </div>
-                  <div v-else>
+                  <div v-else style="color: #e8b502">
                     {{ v.tsSignerCertificateDn.subjectDn.commonName }}
                   </div>
                 </v-list-item-content>
@@ -428,7 +429,7 @@
                        v-if="v.tsCertPathTrusted">
                     {{ v.tsSignerCertificateDn.issuerDn.commonName }}
                   </div>
-                  <div v-else>
+                  <div v-else style="color: #e8b502">
                     {{ v.tsSignerCertificateDn.issuerDn.commonName }}
                   </div>
                 </v-list-item-content>
@@ -444,7 +445,7 @@
                        v-if="v.tsCertPathTrusted">
                     {{ new Date(v.tsSignerCertificateDn.start) }}
                   </div>
-                  <div v-else>
+                  <div v-else style="color: #e8b502">
                     {{ new Date(v.tsSignerCertificateDn.start) }}
                   </div>
                 </v-list-item-content>
@@ -460,7 +461,7 @@
                        v-if="v.tsCertPathTrusted">
                     {{ new Date(v.tsSignerCertificateDn.end) }}
                   </div>
-                  <div v-else>
+                  <div v-else style="color: #e8b502">
                     {{ new Date(v.tsSignerCertificateDn.end) }}
                   </div>
                 </v-list-item-content>
