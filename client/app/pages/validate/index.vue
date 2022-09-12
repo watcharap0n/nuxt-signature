@@ -76,67 +76,74 @@
         />
       </div>
 
-      <v-card flat>
-        <v-card-text>
-          <v-row justify="center" align="center">
-            <v-checkbox
-                color="lime"
-                v-model="checkbox"
-                dense>
-              <template v-slot:label>
-                <small style="margin-top: 10px">
-                  การตรวจสอบเอกสารดังกล่าว ผู้ใช้บริการยินยอมให้บริษัทตรวจสอบเอกสารและ
-                  บริษัทยืนยันว่า <br> ไม่ได้มีการเก็บเอกสาร หรือเนื้อหาส่วนหนึ่งส่วนใดไว้ในระบบ
-                  โดยสามารถคลิกเพื่ออ่าน
-                  <v-tooltip bottom>
-                    <template v-slot:activator="{ on }">
-                      <a
-                          target="_blank"
-                          href="https://exkasan.com/privacy.html"
-                          @click.stop
-                          v-on="on"
-                      >
-                        เงื่อนไขการให้บริการ
-                      </a>
-                    </template>
-                    เงื่อนไขการให้บริการ
-                  </v-tooltip>
-                </small>
-              </template>
-            </v-checkbox>
-          </v-row>
-        </v-card-text>
-      </v-card>
+      <v-form
+          ref="form"
+          v-model="valid"
+          lazy-validation
+      >
+        <v-card flat>
+          <v-card-text>
+            <v-row justify="center" align="center">
+              <v-checkbox
+                  :rules="[v => !!v]"
+                  color="lime"
+                  v-model="checkbox"
+                  dense>
+                <template v-slot:label>
+                  <small style="margin-top: 10px">
+                    การตรวจสอบเอกสารดังกล่าว ผู้ใช้บริการยินยอมให้บริษัทตรวจสอบเอกสารและ
+                    บริษัทยืนยันว่า <br> ไม่ได้มีการเก็บเอกสาร หรือเนื้อหาส่วนหนึ่งส่วนใดไว้ในระบบ
+                    โดยสามารถคลิกเพื่ออ่าน
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on }">
+                        <a
+                            target="_blank"
+                            href="https://exkasan.com/privacy.html"
+                            @click.stop
+                            v-on="on"
+                        >
+                          เงื่อนไขการให้บริการ
+                        </a>
+                      </template>
+                      เงื่อนไขการให้บริการ
+                    </v-tooltip>
+                  </small>
+                </template>
+              </v-checkbox>
+            </v-row>
+          </v-card-text>
+        </v-card>
 
-      <v-card flat style="margin-top: -10px">
-        <v-card-actions>
-          <v-row>
-            <v-col cols="6" sm="6">
-              <v-btn
-                  :disabled="!btnSubmit"
-                  block
-                  x-large
-                  color="#68E7D6"
-                  @click="verifyCaptcha"
-                  :loading="spin"
-              >
-                ตรวจสอบไฟล์
-              </v-btn>
-            </v-col>
+        <v-card flat style="margin-top: -10px">
+          <v-card-actions>
+            <v-row>
+              <v-col cols="6" sm="6">
+                <v-btn
+                    :disabled="!valid"
+                    block
+                    x-large
+                    color="#68E7D6"
+                    @click="verifyCaptcha"
+                    :loading="spin"
+                >
+                  ตรวจสอบไฟล์
+                </v-btn>
+              </v-col>
 
-            <v-col cols="6" sm="6">
-              <v-btn
-                  block
-                  link
-                  x-large
-                  color="#F98F2E"
-              >
-                กลับหน้าหลัก
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-card-actions>
-      </v-card>
+              <v-col cols="6" sm="6">
+                <v-btn
+                    block
+                    link
+                    x-large
+                    color="#F98F2E"
+                >
+                  กลับหน้าหลัก
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-card-actions>
+        </v-card>
+      </v-form>
     </div>
 
   </v-container>
@@ -148,12 +155,12 @@ import liff from '@line/liff';
 export default {
   data() {
     return {
+      valid: true,
       recaptcha: false,
       checkbox: false,
       hideProgress: false,
       progress: 0,
       handleEvent: false,
-      btnSubmit: false,
       siteKey: this.$config.siteKey,
       secretKey: this.$config.secretKey,
       spin: false,
@@ -175,7 +182,7 @@ export default {
   async mounted() {
     try {
       if (this.$device.android || this.$device.ios) {
-        await this.initialized();
+        console.log(this.$device)
       }
       await this.$recaptcha.init();
     } catch (e) {
@@ -183,33 +190,7 @@ export default {
     }
   },
 
-  watch: {
-    checkbox(val) {
-      if (this.recaptcha)
-        this.btnSubmit = !this.btnSubmit
-    }
-  },
-
   methods: {
-    async initialized() {
-      await liff.init({liffId: this.$config.liffId},
-          () => {
-            if (liff.isLoggedIn()) {
-              liff.getProfile()
-                  .then((profile) => {
-                    this.authUser.issue = 'line'
-                    this.authUser.display_name = profile.displayName
-                    this.authUser = liff.getDecodedIDToken().email ? liff.getDecodedIDToken().email : null
-                    this.authUser.user_id = profile.userId
-                    this.authUser.picture_url = profile.pictureUrl
-                    this.initQuotaProfile()
-                  })
-            } else {
-              liff.login();
-            }
-          });
-    },
-
     async initQuotaProfile() {
       const path = '/timestamp/profile/initialize';
       const config = {
@@ -245,7 +226,7 @@ export default {
       formData.append('file', this.file);
       await this.$axios.post(path, formData, config)
           .then((res) => {
-            this.btnSubmit = false;
+            this.valid = false;
             this.transaction = res.data;
             this.$recaptcha.reset();
             if (!this.transaction.signatures) {
@@ -276,7 +257,7 @@ export default {
             })
             console.error(err);
             this.$recaptcha.reset();
-            this.btnSubmit = false;
+            this.valid = false;
             this.spin = false;
           })
       this.spin = false;
@@ -316,12 +297,24 @@ export default {
 
     async verifyCaptcha() {
       try {
-        if (this.file) {
-          const token = await this.$recaptcha.getResponse();
-          const path = `/captcha-api/siteverify?secret=${this.secretKey}&response=${token}`;
-          const response = await this.$axios.$post(path);
-          await this.validate_exkasan();
-          return response
+        if (this.$refs.form.validate() && this.recaptcha) {
+          if (this.file) {
+            const token = await this.$recaptcha.getResponse();
+            const path = `/captcha-api/siteverify?secret=${this.secretKey}&response=${token}`;
+            const response = await this.$axios.$post(path);
+            await this.validate_exkasan();
+            return response
+          } else {
+            this.$notifier.showMessage({
+              color: 'red',
+              content: 'กรุณาอัพโหลดไฟล์'
+            })
+          }
+        } else {
+          this.$notifier.showMessage({
+            color: 'red',
+            content: 'กรุณายืนยันด้วย recaptcha'
+          })
         }
       } catch (error) {
         this.$swal.fire({

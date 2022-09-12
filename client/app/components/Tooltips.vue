@@ -1,5 +1,9 @@
 <template>
-  <v-tooltip bottom color="white">
+  <v-menu
+      open-on-hover
+      right
+      offset-y
+  >
     <template v-slot:activator="{ on, attrs }">
       <v-icon
           style="margin-top: -10px"
@@ -30,7 +34,7 @@
           Union Trusted List (EUTL) </a><br> หรืออื่นๆที่ปรากฏในระบบ Exkasan
       </v-card-text>
     </v-card>
-  </v-tooltip>
+  </v-menu>
 </template>
 
 <script>
