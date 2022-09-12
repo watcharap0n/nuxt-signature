@@ -5,6 +5,9 @@ module.exports = {
                 analyzerMode: 'static'
             }
         },
+        generate: {
+            fallback: true
+        },
         html: {
             minify: {
                 collapseBooleanAttributes: true,
