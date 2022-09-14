@@ -376,7 +376,7 @@
                 </v-list-item-content>
 
                 <v-list-item-content v-if="v.tsCertPathTrusted">
-                  <v-list-item-icon>
+                  <v-list-item-title>
                     <v-icon left color="#187331">mdi-checkbox-marked-circle</v-icon>
                     <div class="font-bold" style="color: #187331">Timestamp is valid
                       <tooltips color="#187331"
@@ -384,11 +384,12 @@
                                 card-header="Timestamp is valid"
                       />
                     </div>
-                  </v-list-item-icon>
+                  </v-list-item-title>
                 </v-list-item-content>
 
                 <v-list-item-content v-else>
                   <v-list-item-title class="font-bold" style="color: #e8b502">Timestamp requires validating
+                    <v-icon left color="#e8b502">mdi-alert</v-icon>
                     <tooltips color="#e8b502"
                               icon="mdi-alert"
                               color-icon="#e8b502"
