@@ -398,70 +398,71 @@
                     />
                   </v-list-item-title>
                 </v-list-item-content>
+              </v-list-item>
 
-                <v-list-item link>
-                  <v-list-item-content>
-                    <v-list-item-title>ชื่อองค์กรประทับรับรองเวลา</v-list-item-title>
-                  </v-list-item-content>
+              <v-list-item link>
+                <v-list-item-content>
+                  <v-list-item-title>ชื่อองค์กรประทับรับรองเวลา</v-list-item-title>
+                </v-list-item-content>
 
-                  <v-list-item-content>
-                    <div style="color: #187331"
-                         v-if="v.tsCertPathTrusted">
-                      {{ v.tsSignerCertificateDn.subjectDn.commonName }}
-                    </div>
-                    <div v-else style="color: #e8b502">
-                      {{ v.tsSignerCertificateDn.subjectDn.commonName }}
-                    </div>
-                  </v-list-item-content>
-                </v-list-item>
+                <v-list-item-content>
+                  <div style="color: #187331"
+                       v-if="v.tsCertPathTrusted">
+                    {{ v.tsSignerCertificateDn.subjectDn.commonName }}
+                  </div>
+                  <div v-else style="color: #e8b502">
+                    {{ v.tsSignerCertificateDn.subjectDn.commonName }}
+                  </div>
+                </v-list-item-content>
+              </v-list-item>
 
-                <v-list-item link>
-                  <v-list-item-content>
-                    <v-list-item-title>ชื่อผู้ใหบริการใบรับรอง</v-list-item-title>
-                  </v-list-item-content>
+              <v-list-item link>
+                <v-list-item-content>
+                  <v-list-item-title>ชื่อผู้ใหบริการใบรับรอง</v-list-item-title>
+                </v-list-item-content>
 
-                  <v-list-item-content>
-                    <div style="color: #187331"
-                         v-if="v.tsCertPathTrusted">
-                      {{ v.tsSignerCertificateDn.issuerDn.commonName }}
-                    </div>
-                    <div v-else style="color: #e8b502">
-                      {{ v.tsSignerCertificateDn.issuerDn.commonName }}
-                    </div>
-                  </v-list-item-content>
-                </v-list-item>
+                <v-list-item-content>
+                  <div style="color: #187331"
+                       v-if="v.tsCertPathTrusted">
+                    {{ v.tsSignerCertificateDn.issuerDn.commonName }}
+                  </div>
+                  <div v-else style="color: #e8b502">
+                    {{ v.tsSignerCertificateDn.issuerDn.commonName }}
+                  </div>
+                </v-list-item-content>
+              </v-list-item>
 
-                <v-list-item link>
-                  <v-list-item-content>
-                    <v-list-item-title>วันออกใบรับรอง</v-list-item-title>
-                  </v-list-item-content>
+              <v-list-item link>
+                <v-list-item-content>
+                  <v-list-item-title>วันออกใบรับรอง</v-list-item-title>
+                </v-list-item-content>
 
-                  <v-list-item-content>
-                    <div style="color: #187331"
-                         v-if="v.tsCertPathTrusted">
-                      {{ new Date(v.tsSignerCertificateDn.start) }}
-                    </div>
-                    <div v-else style="color: #e8b502">
-                      {{ new Date(v.tsSignerCertificateDn.start) }}
-                    </div>
-                  </v-list-item-content>
-                </v-list-item>
+                <v-list-item-content>
+                  <div style="color: #187331"
+                       v-if="v.tsCertPathTrusted">
+                    {{ new Date(v.tsSignerCertificateDn.start) }}
+                  </div>
+                  <div v-else style="color: #e8b502">
+                    {{ new Date(v.tsSignerCertificateDn.start) }}
+                  </div>
+                </v-list-item-content>
+              </v-list-item>
 
-                <v-list-item link>
-                  <v-list-item-content>
-                    <v-list-item-title>วันหมดอายุใบรับรองอิเล็กทรอนิกส์</v-list-item-title>
-                  </v-list-item-content>
+              <v-list-item link>
+                <v-list-item-content>
+                  <v-list-item-title>วันหมดอายุใบรับรองอิเล็กทรอนิกส์</v-list-item-title>
+                </v-list-item-content>
 
-                  <v-list-item-content>
-                    <div style="color: #187331"
-                         v-if="v.tsCertPathTrusted">
-                      {{ new Date(v.tsSignerCertificateDn.end) }}
-                    </div>
-                    <div v-else style="color: #e8b502">
-                      {{ new Date(v.tsSignerCertificateDn.end) }}
-                    </div>
-                  </v-list-item-content>
-                </v-list-item>
+                <v-list-item-content>
+                  <div style="color: #187331"
+                       v-if="v.tsCertPathTrusted">
+                    {{ new Date(v.tsSignerCertificateDn.end) }}
+                  </div>
+                  <div v-else style="color: #e8b502">
+                    {{ new Date(v.tsSignerCertificateDn.end) }}
+                  </div>
+                </v-list-item-content>
+              </v-list-item>
 
             </div>
           </v-list-group>
