@@ -376,94 +376,92 @@
                 </v-list-item-content>
 
                 <v-list-item-content v-if="v.tsCertPathTrusted">
-                  <v-list-item-title>
+                  <v-list-item-title style="color: #187331" class="font-bold">
                     <v-icon left color="#187331">mdi-checkbox-marked-circle</v-icon>
-                    <div class="font-bold" style="color: #187331">Timestamp is valid
-                      <tooltips color="#187331"
-                                card-text="มีการประทับรับรองเวลาอิเล็กทรอนิกส์ออกโดยระบบ"
-                                card-header="Timestamp is valid"
-                      />
-                    </div>
+                    Timestamp is valid
+                    <tooltips color="#187331"
+                              card-text="มีการประทับรับรองเวลาอิเล็กทรอนิกส์ออกโดยระบบ"
+                              card-header="Timestamp is valid"
+                    />
                   </v-list-item-title>
                 </v-list-item-content>
 
                 <v-list-item-content v-else>
-                  <v-icon left color="#e8b502">mdi-alert</v-icon>
+                  <v-icon left color="#187331">mdi-alert</v-icon>
                   <v-list-item-title class="font-bold" style="color: #e8b502">Timestamp requires validating
                     <tooltips color="#e8b502"
                               icon="mdi-alert"
                               color-icon="#e8b502"
                               color-header="#e8b502"
-                              card-text="Timestamp requires validating"
-                              card-header="การประทับรับรองเวลาอิเล็กทรอนิกส์ไม่ได้ถูกออกโดยระบบ"
+                              card-text="การประทับรับรองเวลาอิเล็กทรอนิกส์ไม่ได้ถูกออกโดยระบบ"
+                              card-header="Timestamp requires validating"
                     />
                   </v-list-item-title>
                 </v-list-item-content>
-              </v-list-item>
 
-              <v-list-item link>
-                <v-list-item-content>
-                  <v-list-item-title>ชื่อองค์กรประทับรับรองเวลา</v-list-item-title>
-                </v-list-item-content>
+                <v-list-item link>
+                  <v-list-item-content>
+                    <v-list-item-title>ชื่อองค์กรประทับรับรองเวลา</v-list-item-title>
+                  </v-list-item-content>
 
-                <v-list-item-content>
-                  <div style="color: #187331"
-                       v-if="v.tsCertPathTrusted">
-                    {{ v.tsSignerCertificateDn.subjectDn.commonName }}
-                  </div>
-                  <div v-else style="color: #e8b502">
-                    {{ v.tsSignerCertificateDn.subjectDn.commonName }}
-                  </div>
-                </v-list-item-content>
-              </v-list-item>
+                  <v-list-item-content>
+                    <div style="color: #187331"
+                         v-if="v.tsCertPathTrusted">
+                      {{ v.tsSignerCertificateDn.subjectDn.commonName }}
+                    </div>
+                    <div v-else style="color: #e8b502">
+                      {{ v.tsSignerCertificateDn.subjectDn.commonName }}
+                    </div>
+                  </v-list-item-content>
+                </v-list-item>
 
-              <v-list-item link>
-                <v-list-item-content>
-                  <v-list-item-title>ชื่อผู้ใหบริการใบรับรอง</v-list-item-title>
-                </v-list-item-content>
+                <v-list-item link>
+                  <v-list-item-content>
+                    <v-list-item-title>ชื่อผู้ใหบริการใบรับรอง</v-list-item-title>
+                  </v-list-item-content>
 
-                <v-list-item-content>
-                  <div style="color: #187331"
-                       v-if="v.tsCertPathTrusted">
-                    {{ v.tsSignerCertificateDn.issuerDn.commonName }}
-                  </div>
-                  <div v-else style="color: #e8b502">
-                    {{ v.tsSignerCertificateDn.issuerDn.commonName }}
-                  </div>
-                </v-list-item-content>
-              </v-list-item>
+                  <v-list-item-content>
+                    <div style="color: #187331"
+                         v-if="v.tsCertPathTrusted">
+                      {{ v.tsSignerCertificateDn.issuerDn.commonName }}
+                    </div>
+                    <div v-else style="color: #e8b502">
+                      {{ v.tsSignerCertificateDn.issuerDn.commonName }}
+                    </div>
+                  </v-list-item-content>
+                </v-list-item>
 
-              <v-list-item link>
-                <v-list-item-content>
-                  <v-list-item-title>วันออกใบรับรอง</v-list-item-title>
-                </v-list-item-content>
+                <v-list-item link>
+                  <v-list-item-content>
+                    <v-list-item-title>วันออกใบรับรอง</v-list-item-title>
+                  </v-list-item-content>
 
-                <v-list-item-content>
-                  <div style="color: #187331"
-                       v-if="v.tsCertPathTrusted">
-                    {{ new Date(v.tsSignerCertificateDn.start) }}
-                  </div>
-                  <div v-else style="color: #e8b502">
-                    {{ new Date(v.tsSignerCertificateDn.start) }}
-                  </div>
-                </v-list-item-content>
-              </v-list-item>
+                  <v-list-item-content>
+                    <div style="color: #187331"
+                         v-if="v.tsCertPathTrusted">
+                      {{ new Date(v.tsSignerCertificateDn.start) }}
+                    </div>
+                    <div v-else style="color: #e8b502">
+                      {{ new Date(v.tsSignerCertificateDn.start) }}
+                    </div>
+                  </v-list-item-content>
+                </v-list-item>
 
-              <v-list-item link>
-                <v-list-item-content>
-                  <v-list-item-title>วันหมดอายุใบรับรองอิเล็กทรอนิกส์</v-list-item-title>
-                </v-list-item-content>
+                <v-list-item link>
+                  <v-list-item-content>
+                    <v-list-item-title>วันหมดอายุใบรับรองอิเล็กทรอนิกส์</v-list-item-title>
+                  </v-list-item-content>
 
-                <v-list-item-content>
-                  <div style="color: #187331"
-                       v-if="v.tsCertPathTrusted">
-                    {{ new Date(v.tsSignerCertificateDn.end) }}
-                  </div>
-                  <div v-else style="color: #e8b502">
-                    {{ new Date(v.tsSignerCertificateDn.end) }}
-                  </div>
-                </v-list-item-content>
-              </v-list-item>
+                  <v-list-item-content>
+                    <div style="color: #187331"
+                         v-if="v.tsCertPathTrusted">
+                      {{ new Date(v.tsSignerCertificateDn.end) }}
+                    </div>
+                    <div v-else style="color: #e8b502">
+                      {{ new Date(v.tsSignerCertificateDn.end) }}
+                    </div>
+                  </v-list-item-content>
+                </v-list-item>
 
             </div>
           </v-list-group>
