@@ -29,8 +29,8 @@
       </v-card-title>
       <v-card-text>
         {{ cardText }} Exkasan หรือออกโดยผู้ให้บริการที่อยู่ใน <br> <a
-          href="https://helpx.adobe.com/th_th/acrobat/kb/approved-trust-list1.html">Adobe Trusted List (ATL)</a> และ
-        <a href="https://esignature.ec.europa.eu/efda/tl-browser/#/screen/home">Eurupien
+          href="https://helpx.adobe.com/th_th/acrobat/kb/approved-trust-list1.html">Adobe Approved Trusted List (AATL)</a> และ
+        <a href="https://esignature.ec.europa.eu/efda/tl-browser/#/screen/home">European
           Union Trusted List (EUTL) </a><br> หรืออื่นๆที่ปรากฏในระบบ Exkasan
       </v-card-text>
     </v-card>

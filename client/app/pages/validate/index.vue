@@ -76,74 +76,67 @@
         />
       </div>
 
-      <v-form
-          ref="form"
-          v-model="valid"
-          lazy-validation
-      >
-        <v-card flat>
-          <v-card-text>
-            <v-row justify="center" align="center">
-              <v-checkbox
-                  :rules="[v => !!v]"
-                  color="lime"
-                  v-model="checkbox"
-                  dense>
-                <template v-slot:label>
-                  <small style="margin-top: 10px">
-                    การตรวจสอบเอกสารดังกล่าว ผู้ใช้บริการยินยอมให้บริษัทตรวจสอบเอกสารและ
-                    บริษัทยืนยันว่า <br> ไม่ได้มีการเก็บเอกสาร หรือเนื้อหาส่วนหนึ่งส่วนใดไว้ในระบบ
-                    โดยสามารถคลิกเพื่ออ่าน
-                    <v-tooltip bottom>
-                      <template v-slot:activator="{ on }">
-                        <a
-                            target="_blank"
-                            href="https://exkasan.com/privacy.html"
-                            @click.stop
-                            v-on="on"
-                        >
-                          เงื่อนไขการให้บริการ
-                        </a>
-                      </template>
-                      เงื่อนไขการให้บริการ
-                    </v-tooltip>
-                  </small>
-                </template>
-              </v-checkbox>
-            </v-row>
-          </v-card-text>
-        </v-card>
+      <v-card flat>
+        <v-card-text>
+          <v-row justify="center" align="center">
+            <v-checkbox
+                color="lime"
+                v-model="checkbox"
+                dense>
+              <template v-slot:label>
+                <small style="margin-top: 10px">
+                  การตรวจสอบเอกสารดังกล่าว ผู้ใช้บริการยินยอมให้บริษัทตรวจสอบเอกสารและ
+                  บริษัทยืนยันว่า <br> ไม่ได้มีการเก็บเอกสาร หรือเนื้อหาส่วนหนึ่งส่วนใดไว้ในระบบ
+                  โดยสามารถคลิกเพื่ออ่าน
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on }">
+                      <a
+                          target="_blank"
+                          href="https://exkasan.com/privacy.html"
+                          @click.stop
+                          v-on="on"
+                      >
+                        เงื่อนไขการให้บริการ
+                      </a>
+                    </template>
+                    เงื่อนไขการให้บริการ
+                  </v-tooltip>
+                </small>
+              </template>
+            </v-checkbox>
+          </v-row>
+        </v-card-text>
+      </v-card>
 
-        <v-card flat style="margin-top: -10px">
-          <v-card-actions>
-            <v-row>
-              <v-col cols="6" sm="6">
-                <v-btn
-                    :disabled="!valid"
-                    block
-                    x-large
-                    color="#68E7D6"
-                    @click="verifyCaptcha"
-                    :loading="spin"
-                >
-                  ตรวจสอบไฟล์
-                </v-btn>
-              </v-col>
+      <v-card flat style="margin-top: -10px">
+        <v-card-actions>
+          <v-row>
+            <v-col cols="6" sm="6">
+              <v-btn
+                  :disabled="!enabledButton"
+                  block
+                  x-large
+                  color="#68E7D6"
+                  @click="verifyCaptcha"
+                  :loading="spin"
+              >
+                ตรวจสอบไฟล์
+              </v-btn>
+            </v-col>
 
-              <v-col cols="6" sm="6">
-                <v-btn
-                    block
-                    link
-                    x-large
-                    color="#F98F2E"
-                >
-                  กลับหน้าหลัก
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-card-actions>
-        </v-card>
-      </v-form>
+            <v-col cols="6" sm="6">
+              <v-btn
+                  block
+                  link
+                  x-large
+                  color="#F98F2E"
+              >
+                กลับหน้าหลัก
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-card-actions>
+      </v-card>
     </div>
 
   </v-container>
@@ -155,7 +148,8 @@ import liff from '@line/liff';
 export default {
   data() {
     return {
-      valid: true,
+      enabledButton: false,
+      valid: false,
       recaptcha: false,
       checkbox: false,
       hideProgress: false,
@@ -177,6 +171,16 @@ export default {
         value => !value || value.size < 100000000 || 'file size should be less than 10 MB!'
       ],
     }
+  },
+
+  watch: {
+    recaptcha(val) {
+      this.enabledButton = val === true && this.checkbox === true;
+    },
+    checkbox(val) {
+      this.enabledButton = val === true && this.recaptcha === true;
+    }
+
   },
 
   async mounted() {
@@ -287,7 +291,6 @@ export default {
     onSuccess(token) {
       this.recaptcha = true
     },
-
     onExpired() {
       console.log('Expired')
     },
@@ -297,23 +300,16 @@ export default {
 
     async verifyCaptcha() {
       try {
-        if (this.$refs.form.validate() && this.recaptcha) {
-          if (this.file) {
-            const token = await this.$recaptcha.getResponse();
-            const path = `/captcha-api/siteverify?secret=${this.secretKey}&response=${token}`;
-            const response = await this.$axios.$post(path);
-            await this.validate_exkasan();
-            return response
-          } else {
-            this.$notifier.showMessage({
-              color: 'red',
-              content: 'กรุณาอัพโหลดไฟล์'
-            })
-          }
+        if (this.file) {
+          const token = await this.$recaptcha.getResponse();
+          const path = `/captcha-api/siteverify?secret=${this.secretKey}&response=${token}`;
+          const response = await this.$axios.$post(path);
+          await this.validate_exkasan();
+          return response
         } else {
           this.$notifier.showMessage({
             color: 'red',
-            content: 'กรุณายืนยันด้วย recaptcha'
+            content: 'กรุณาอัพโหลดไฟล์'
           })
         }
       } catch (error) {
