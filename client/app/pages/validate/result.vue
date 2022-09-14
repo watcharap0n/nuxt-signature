@@ -259,8 +259,9 @@
                 </v-list-item-content>
 
                 <v-list-item-content v-else>
-                  <v-list-item-title class="font-bold" style="color: #e8b502">Timestamp requires validating
+                  <v-list-item-title class="font-bold" style="color: #e8b502">
                     <v-icon left color="#e8b502">mdi-alert</v-icon>
+                    Timestamp requires validating
                     <tooltips color="#e8b502"
                               icon="mdi-alert"
                               color-icon="#e8b502"
@@ -387,8 +388,9 @@
                 </v-list-item-content>
 
                 <v-list-item-content v-else>
-                  <v-list-item-title class="font-bold" style="color: #e8b502">Timestamp requires validating
+                  <v-list-item-title class="font-bold" style="color: #e8b502">
                     <v-icon left color="#e8b502">mdi-alert</v-icon>
+                    Timestamp requires validating
                     <tooltips color="#e8b502"
                               icon="mdi-alert"
                               color-icon="#e8b502"
