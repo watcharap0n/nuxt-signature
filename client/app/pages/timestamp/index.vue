@@ -260,6 +260,7 @@ export default {
       channel: '',
       authUser: {},
       profileLINE: {},
+      baseURL: 'http://localhost:8000',
       rules: [
         value => !!value || 'required.',
         value => !value || value.size < 100000000 || 'file size should be less than 10 MB!'
@@ -306,25 +307,24 @@ export default {
 
   async created() {
     this.overlay = true
-    await liff.init({liffId: this.liffIdTs},
-        () => {
-          if (liff.isLoggedIn()) {
-            liff.getProfile()
-                .then((profile) => {
-                  this.$parent.$emit('authUser', profile);
-                  this.$parent.$emit('issue', 'line')
-                  this.profileLINE = profile
-                  this.profileLINE.email = liff.getDecodedIDToken().email ? liff.getDecodedIDToken().email : null
-                  this.channel = 'line'
-                })
-            this.$nuxt.$emit('session', false)
-            this.dialogLogin = false
-          }
-          if (!liff.isLoggedIn() && !this.$auth.loggedIn) {
-            this.$nuxt.$emit('session', true)
-            this.dialogLogin = true
-          }
-        })
+    await liff.init({liffId: this.liffIdTs}, () => {
+      if (liff.isLoggedIn()) {
+        liff.getProfile()
+            .then((profile) => {
+              this.$parent.$emit('authUser', profile);
+              this.$parent.$emit('issue', 'line')
+              this.profileLINE = profile
+              this.profileLINE.email = liff.getDecodedIDToken().email ? liff.getDecodedIDToken().email : null
+              this.channel = 'line'
+            })
+        this.$nuxt.$emit('session', false)
+        this.dialogLogin = false
+      }
+      if (!liff.isLoggedIn() && !this.$auth.loggedIn) {
+        this.$nuxt.$emit('session', true)
+        this.dialogLogin = true
+      }
+    })
     if (this.$auth.loggedIn) {
       await this.$parent.$emit('authUser', this.$auth.user);
       await this.$parent.$emit('issue', this.$auth.strategy.name)
@@ -337,6 +337,7 @@ export default {
       this.dialogLogin = true
     }
     this.overlay = false
+    await this.$auth.loginWith('cookie')
   },
 
   methods: {
@@ -355,7 +356,7 @@ export default {
     },
 
     async initializedGoogle() {
-      await this.$auth.loginWith('google', {params: {prompt: "select_account"}});
+      await this.$auth.loginWith('google', {params: {prompt: "select_account"}})
     },
 
     async quotaProfile() {
@@ -395,7 +396,7 @@ export default {
     },
 
     async initQuotaProfile() {
-      const path = '/timestamp/profile/initialize';
+      const path = `/timestamp/profile/initialize`;
       const config = {
         auth: {
           username: this.basicAuthUsername,
@@ -442,7 +443,7 @@ export default {
 
     async timestampExkasan() {
       this.spin = true;
-      const path = '/timestamp/';
+      const path = `/timestamp/`;
       const config = {
         onUploadProgress: function (progressEvent) {
           this.progress = parseInt(Math.round((progressEvent.loaded * 100) / progressEvent.total))

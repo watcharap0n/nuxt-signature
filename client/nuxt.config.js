@@ -159,6 +159,16 @@ module.exports = {
 
     auth: {
         strategies: {
+            cookie: {
+                cookie: {
+                    name: 'fastapi-csrf-token'
+                },
+                endpoints: {
+                    csrf: {
+                        url: `/timestamp/auth/csrftoken`
+                    }
+                }
+            },
             facebook: {
                 endpoints: {
                     userInfo: 'https://graph.facebook.com/v6.0/me?fields=id,name,picture,email{url}'
